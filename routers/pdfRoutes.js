@@ -5,19 +5,22 @@ const { generatePdfBuffer } = require("../controllers/generatepdf");
 const router = express.Router();
 
 router.post("/resume/download-pdf", async (req, res) => {
+
     const { templatename, ...resumeData } = req.body;
 
+    const data = resumeData?.resumeData
+    const tempName = resumeData?.templatename
     // if (!templatename || !resumeData) {
     //     return res.status(400).json({ error: "templatename and data are required." });
     // }
 
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-    const safeFirst = resumeData.firstName?.replace(/\s+/g, "_") || "User";
-    const safeLast = resumeData.lastName?.replace(/\s+/g, "_") || "Resume";
+    const safeFirst = data?.firstName?.replace(/\s+/g, "_") || "User";
+    const safeLast = data?.lastName?.replace(/\s+/g, "_") || "Resume";
     const filename = `${safeFirst}_${safeLast}_Resume_${timestamp}.pdf`;
 
     try {
-        const pdfBuffer = await generatePdfBuffer(templatename || "Harvard", resumeData);
+        const pdfBuffer = await generatePdfBuffer(tempName || "Harvard", data);
 
         res.set({
             "Content-Type": "application/pdf",
