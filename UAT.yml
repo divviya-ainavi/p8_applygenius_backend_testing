@@ -6,7 +6,7 @@ trigger:
     exclude:
       - '*'
 variables:
-  Devozy_DUMMY_VARIABLE: ID_ZjzladY5
+  Devozy_DUMMY_VARIABLE: ID_8Hrd16ol
   IMAGE_NAME: PLN1000012_MERN_UAT
 pool:
   vmImage: ubuntu-latest
@@ -17,7 +17,7 @@ steps:
     displayName: node
   - script: npm install --force
     displayName: npm
-  - script: sudo tar -czvf pln1000012.tar.gz  *;
+  - script: sudo tar -czvf pln1000012.tar.gz *;
     displayName: Create tar.gz Archive of Build Files
   - task: PublishBuildArtifacts@1
     inputs:
