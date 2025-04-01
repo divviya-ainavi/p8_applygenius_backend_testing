@@ -1,0 +1,178 @@
+<html lang="en">
+  <head>
+    <meta charset="windows-1252" />
+    <title>{{name}} - Resume</title>
+    <style>
+      <!-- /* Font Definitions */ @font-face {font-family:"Cambria Math";
+      panose-1:2 4 5 3 5 4 6 3 2 4;} @font-face {font-family:Georgia; panose-1:2
+      4 5 2 5 4 5 2 3 3;} @font-face {font-family:"Times New Roman \(Body CS\)";
+      panose-1:0 0 0 0 0 0 0 0 0 0;} @font-face {font-family:"Segoe UI";
+      panose-1:2 11 5 2 4 2 4 2 2 3;} @font-face {font-family:Consolas;
+      panose-1:2 11 6 9 2 2 4 3 2 4;} /* Style Definitions */ p.MsoNormal,
+      li.MsoNormal, div.MsoNormal {margin:0cm; font-size:12.0pt;
+      font-family:"Arial",sans-serif; color:black;} h1 {mso-style-link:"Heading
+      1 Char"; margin-top:6.0pt; margin-right:0cm; margin-bottom:6.0pt;
+      margin-left:0cm; text-align:right; font-size:14.0pt;
+      font-family:"Georgia",serif; color:#648276; font-weight:bold;} h2
+      {mso-style-link:"Heading 2 Char"; margin-top:6.0pt; margin-right:0cm;
+      margin-bottom:6.0pt; margin-left:0cm; font-size:14.0pt;
+      font-family:"Georgia",serif; color:#648276; font-weight:bold;}
+      p.MsoFooter, li.MsoFooter, div.MsoFooter {mso-style-link:"Footer Char";
+      margin:0cm; font-size:12.0pt; font-family:"Arial",sans-serif;
+      color:black;} p.MsoTitle, li.MsoTitle, div.MsoTitle {mso-style-link:"Title
+      Char"; margin-top:6.0pt; margin-right:0cm; margin-bottom:6.0pt;
+      margin-left:0cm; font-size:45.0pt; font-family:"Georgia",serif;
+      color:black;} p.MsoSubtitle, li.MsoSubtitle, div.MsoSubtitle
+      {mso-style-link:"Subtitle Char"; margin-top:6.0pt; margin-right:0cm;
+      margin-bottom:6.0pt; margin-left:0cm; font-size:22.0pt;
+      font-family:"Georgia",serif; color:black; font-weight:bold;}
+      span.FooterChar {mso-style-name:"Footer Char"; mso-style-link:Footer;
+      font-family:"Arial",sans-serif; color:black;} span.TitleChar
+      {mso-style-name:"Title Char"; mso-style-link:Title;
+      font-family:"Georgia",serif; color:black;} span.SubtitleChar
+      {mso-style-name:"Subtitle Char"; mso-style-link:Subtitle;
+      font-family:"Georgia",serif; color:black; font-weight:bold;}
+      span.Heading1Char {mso-style-name:"Heading 1 Char";
+      mso-style-link:"Heading 1"; font-family:"Georgia",serif; color:#648276;
+      font-weight:bold;} p.TextLeft, li.TextLeft, div.TextLeft
+      {mso-style-name:TextLeft; margin:0cm; text-align:right; line-height:120%;
+      font-size:11.0pt; font-family:"Arial",sans-serif; color:#404040;}
+      span.Heading2Char {mso-style-name:"Heading 2 Char";
+      mso-style-link:"Heading 2"; font-family:"Georgia",serif; color:#648276;
+      font-weight:bold;} p.SmallText, li.SmallText, div.SmallText
+      {mso-style-name:SmallText; margin:0cm; font-size:10.0pt;
+      font-family:"Arial",sans-serif; color:#404040; font-style:italic;}
+      p.TextRight, li.TextRight, div.TextRight {mso-style-name:TextRight;
+      margin:0cm; line-height:120%; font-size:11.0pt;
+      font-family:"Arial",sans-serif; color:#404040;} .MsoChpDefault
+      {font-size:12.0pt; font-family:"Arial",sans-serif;} /* Page Definitions */
+      @page WordSection1 {size:595.3pt 841.9pt; margin:36.0pt 36.0pt 36.0pt
+      36.0pt;} div.WordSection1 {page:WordSection1;} /* List Definitions */ ol
+      {margin-bottom:0cm;} ul {margin-bottom:0cm;} -->
+    </style>
+  </head>
+  <body>
+    <div class="WordSection1">
+      <table
+        border="0"
+        cellpadding="0"
+        cellspacing="0"
+        style="width: 100%; border-collapse: collapse;"
+      >
+        <!-- Header -->
+        <tr>
+          <td
+            colspan="5"
+            style="border-bottom: 2.25pt solid #648276; padding: 10px;"
+          >
+            <p class="MsoTitle">{{name}}</p>
+            <p class="MsoSubtitle">{{jobTitle}}</p>
+          </td>
+        </tr>
+
+        <!-- Contact + Summary -->
+        {{#if (or location phoneNumber email linkedin)}}
+          <tr>
+            <td
+              colspan="2"
+              style="border-right: 2.25pt solid #648276; padding: 10px; vertical-align: top;"
+            >
+              <p style="margin-top: 8px;"></p>
+              <h1>Contact</h1>
+              {{#if location}}<p class="TextLeft">{{location}}</p>{{/if}}
+              {{#if phoneNumber}}<p class="TextLeft">{{phoneNumber}}</p>{{/if}}
+              {{#if email}}<p class="TextLeft">{{email}}</p>{{/if}}
+              {{#if linkedin}}<p class="TextLeft">{{linkedin}}</p>{{/if}}
+            </td>
+            {{#if summary}}
+              <td colspan="3" style="padding: 10px; vertical-align: top;">
+                <h2>Summary</h2>
+                <p class="TextRight">{{summary}}</p>
+              </td>
+            {{/if}}
+          </tr>
+        {{/if}}
+
+        <!-- Education + Experience -->
+        {{#if (or education.length experience.length)}}
+          <tr>
+            {{#if education.length}}
+              <td
+                colspan="2"
+                style="border-right: 2.25pt solid #648276; padding: 10px; vertical-align: top;"
+              >
+                <p style="margin-top: 8px;"></p>
+                <h1>Education</h1>
+                {{#each education}}
+                  <div>
+                    <p class="TextLeft">{{institution}}</p>
+                    <p class="TextLeft">{{degree}}</p>
+                    <p class="TextLeft">{{year}}</p>
+                    <p class="TextLeft">{{score}}</p>
+                  </div><br />
+                {{/each}}
+              </td>
+            {{/if}}
+
+            {{#if experience.length}}
+              <td colspan="3" style="padding: 10px; vertical-align: top;">
+                <h2>Experience</h2>
+                {{#each experience}}
+                  <div>
+                    <p class="SmallText">{{duration}}</p>
+                    <p class="TextRight">{{title}} | {{company}}</p>
+                    {{#each responsibilities}}
+                      <p class="MsoNormal">
+                        <span
+                          style="font-family: Wingdings; color: #648276"
+                        >●</span>
+                        {{this}}
+                      </p>
+                    {{/each}}
+                  </div><br />
+                {{/each}}
+              </td>
+            {{/if}}
+          </tr>
+        {{/if}}
+
+        <!-- Skills + Custom Sections -->
+        {{#if (or skills.length customsections.length)}}
+          <tr>
+            {{#if skills.length}}
+              <td
+                colspan="2"
+                style="border-right: 2.25pt solid #648276; padding: 10px; vertical-align: top;"
+              >
+                <p style="margin-top: 8px;"></p>
+                <h1>Key Skills</h1>
+                {{#each skills}}
+                  <p class="TextLeft">{{this}}</p>
+                {{/each}}
+              </td>
+            {{/if}}
+
+            {{#if customsections.length}}
+              <td colspan="3" style="padding: 10px; vertical-align: top;">
+                {{#each customsections}}
+                  <div
+                    style="border-bottom: 1pt solid #648276; margin-bottom: 10px;"
+                  >
+                    <h2>{{title}}</h2>
+                    {{#each items}}
+                      <p class="TextRight"><b>{{title}}</b>{{#if location}}
+                          |
+                          {{location}}{{/if}}</p>
+                      <p class="TextRight">{{date}}</p>
+                      <p class="MsoNormal">{{description}}</p>
+                    {{/each}}
+                  </div>
+                {{/each}}
+              </td>
+            {{/if}}
+          </tr>
+        {{/if}}
+      </table>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,165 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>{{name}} Resume</title>
+    <style>
+      <!-- /* Font Definitions */ @font-face {font-family:Wingdings; panose-1:5
+      0 0 0 0 0 0 0 0 0;} @font-face {font-family:"Cambria Math"; panose-1:2 4 5
+      3 5 4 6 3 2 4;} @font-face {font-family:"Microsoft YaHei"; panose-1:2 11 5
+      3 2 2 4 2 2 4 ;} @font-face {font-family:"\@Microsoft YaHei" !important;}
+      @font-face {font-family:Tahoma; panose-1:2 11 6 4 3 5 4 4 2 4;} /* Style
+      Definitions */ p.MsoNormal, li.MsoNormal, div.MsoNormal {margin-top:0cm;
+      margin-right:0cm; margin-bottom:9.0pt; margin-left:0cm; line-height:130%;
+      font-size:12.0pt !important; font-family:"Tahoma",sans-serif;
+      color:#7F7F7F;} h1 {mso-style-link:"Heading 1 Char"; margin-top:12.0pt;
+      margin-right:0cm; margin-bottom:8.0pt; margin-left:0cm;
+      page-break-after:avoid; border:none; padding:0cm; font-size:12.0pt;
+      font-family:"Tahoma",sans-serif; color:#0E0B05; text-transform:uppercase;}
+      p.MsoFooter, li.MsoFooter, div.MsoFooter {mso-style-link:"Footer Char";
+      margin-top:12.0pt; margin-right:0cm; margin-bottom:0cm; margin-left:0cm;
+      font-size:12.0pt; font-family:"Tahoma",sans-serif; color:#0E0B05;}
+      p.MsoListBullet, li.MsoListBullet, div.MsoListBullet {margin-top:0cm;
+      margin-right:0cm; margin-bottom:6.0pt; margin-left:10.8pt;
+      text-indent:-10.8pt; line-height:130%; font-size:12.0pt !important;
+      font-family:"Tahoma",sans-serif; color:#7F7F7F;} a:link, span.MsoHyperlink
+      {color:#53C3C7; text-decoration:underline;} span.Heading1Char
+      {mso-style-name:"Heading 1 Char"; mso-style-link:"Heading 1";
+      font-family:"Tahoma",sans-serif; color:#0E0B05; text-transform:uppercase;
+      font-weight:bold;} span.FooterChar {mso-style-name:"Footer Char";
+      mso-style-link:Footer; color:#0E0B05;} p.Name, li.Name, div.Name
+      {mso-style-name:Name; margin-top:0cm; margin-right:0cm;
+      margin-bottom:9.0pt; margin-left:0cm; line-height:80%; font-size:25.0pt;
+      font-family:"Tahoma",sans-serif; color:#0E0B05; text-transform:uppercase;
+      font-weight:bold;} p.NameCxSpFirst, li.NameCxSpFirst, div.NameCxSpFirst
+      {mso-style-name:NameCxSpFirst; margin:0cm; line-height:80% !important;
+      font-size:35.0pt !important; font-family:"Tahoma",sans-serif;
+      color:#0E0B05; text-transform:uppercase; font-weight:bold;}
+      p.NameCxSpMiddle, li.NameCxSpMiddle, div.NameCxSpMiddle
+      {mso-style-name:NameCxSpMiddle; margin:0cm; line-height:80%;
+      font-size:35.0pt; font-family:"Tahoma",sans-serif; color:#0E0B05;
+      text-transform:uppercase; font-weight:bold;} p.NameCxSpLast,
+      li.NameCxSpLast, div.NameCxSpLast {mso-style-name:NameCxSpLast;
+      margin-top:0cm; margin-right:0cm; margin-bottom:9.0pt; margin-left:0cm;
+      line-height:80%; font-size:35.0pt; font-family:"Tahoma",sans-serif;
+      color:#0E0B05; text-transform:uppercase; font-weight:bold;} p.TextLeft,
+      li.TextLeft, div.TextLeft {mso-style-name:TextLeft; margin:0cm;
+      text-align:right; line-height:120%; font-size:11.0pt;
+      font-family:"Arial",sans-serif; color:#404040;} .MsoChpDefault
+      {font-size:10.0pt; font-family:"Tahoma",sans-serif; color:#7F7F7F;}
+      .MsoPapDefault {margin-bottom:9.0pt; line-height:130%;} /* Page
+      Definitions */ @page WordSection1 {size:21.0cm 841.95pt; margin:64.8pt
+      68.4pt 72.0pt 68.4pt;} div.WordSection1 {page:WordSection1;} /* List
+      Definitions */ ol {margin-bottom:0cm;} ul {margin-bottom:0cm;} -->
+    </style>
+  </head>
+
+  <body style="word-wrap: break-word;">
+    <div class="WordSection1">
+      <p class="Name">{{name}}</p>
+
+      <br />
+      <div
+        class="TextLeft"
+        align="left"
+        style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: flex-start; gap: 15px; font-size: 16px; color: #000;"
+      >
+        {{#if location}}{{location}}{{/if}}
+        {{#if email}} | {{email}}{{/if}}
+        {{#if phoneNumber}} | {{phoneNumber}}{{/if}}
+        {{#if jobTitle}} | {{jobTitle}}{{/if}}
+        {{#if linkedin}} | {{linkedin}}{{/if}}
+      </div>
+
+      <br />
+
+      {{#if summary}}
+        <div
+          style="border-top: solid #262626 3pt; border-bottom: solid #7f7f7f 1pt; padding: 5pt 0;"
+        >
+          <h1>Summary</h1>
+        </div>
+        <p class="MsoNormal">{{summary}}</p>
+      {{/if}}
+
+      {{#if experience.length}}
+        <div
+          style="border-top: solid #262626 3pt; border-bottom: solid #7f7f7f 1pt; padding: 5pt 0;"
+        >
+          <h1>Experience</h1>
+        </div>
+        {{#each experience}}
+          <div>
+            <p class="MsoNormal">{{company}}</p>
+            <p class="MsoNormal">
+              {{title}}
+              {{#if title}} | {{/if}}
+              {{duration}}
+            </p>
+            {{#if responsibilities.length}}
+              {{#each responsibilities}}
+                <p class="MsoListBullet"><span
+                    style="font-family: Wingdings; color: #e3ab47"
+                  >●</span>
+                  {{this}}</p>
+              {{/each}}
+            {{else}}
+              <p>No key achievements provided.</p>
+            {{/if}}
+            <br />
+          </div>
+        {{/each}}
+      {{/if}}
+
+      {{#if education.length}}
+        <div
+          style="border-top: solid #262626 3pt; border-bottom: solid #7f7f7f 1pt; padding: 5pt 0;"
+        >
+          <h1>Education</h1>
+        </div>
+        {{#each education}}
+          <p class="MsoNormal">
+            <b>{{institution}}</b><br />
+            <span><b>{{degree}}</b>
+              {{#if from}} | {{from}}{{/if}}
+              {{#if to}} to {{to}}{{/if}}</span><br />
+            {{score}}
+          </p>
+        {{/each}}
+      {{/if}}
+
+      {{#if skills.length}}
+        <div
+          style="border-top: solid #262626 3pt; border-bottom: solid #7f7f7f 1pt; padding: 5pt 0;"
+        >
+          <h1>Skills</h1>
+        </div>
+        <div class="skills-container">
+          {{#each skills}}
+            <div class="skills-column">
+              <p class="MsoNormal" style="font-weight: normal;">{{this}}</p>
+            </div>
+          {{/each}}
+        </div>
+      {{/if}}
+
+      {{#if customsections.length}}
+        {{#each customsections}}
+          <div
+            style="border-top: solid #262626 3pt; border-bottom: solid #7f7f7f 1pt; padding: 5pt 0;"
+          >
+            <h1>{{title}}</h1>
+          </div>
+          {{#each items}}
+            <p class="MsoListBullet">
+              <span style="font-family: Wingdings; color: #e3ab47">●</span>
+              <strong>{{title}}</strong>
+              {{#if location}} | <strong>{{location}}</strong>{{/if}}
+              {{#if date}} | {{date}}{{/if}}
+            </p>
+            <p class="MsoNormal">{{description}}</p>
+          {{/each}}
+        {{/each}}
+      {{/if}}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,35 @@
+const express = require("express");
+const path = require("path");
+const { generatePdfBuffer } = require("../controllers/generatepdf");
+
+const router = express.Router();
+
+router.post("/resume/download-pdf", async (req, res) => {
+    const { templatename, ...resumeData } = req.body;
+
+    // if (!templatename || !resumeData) {
+    //     return res.status(400).json({ error: "templatename and data are required." });
+    // }
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const safeFirst = resumeData.firstName?.replace(/\s+/g, "_") || "User";
+    const safeLast = resumeData.lastName?.replace(/\s+/g, "_") || "Resume";
+    const filename = `${safeFirst}_${safeLast}_Resume_${timestamp}.pdf`;
+
+    try {
+        const pdfBuffer = await generatePdfBuffer(templatename || "Harvard", resumeData);
+
+        res.set({
+            "Content-Type": "application/pdf",
+            "Content-Disposition": `attachment; filename=${filename}`,
+            "Content-Length": pdfBuffer.length,
+        });
+
+        return res.end(pdfBuffer);
+    } catch (error) {
+        console.error("PDF generation error:", error);
+        return res.status(500).json({ error: "Failed to generate PDF." });
+    }
+});
+
+module.exports = router;
