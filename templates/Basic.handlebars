@@ -12,7 +12,7 @@
       {mso-style-link:"Heading 1 Char"; margin-top:3.0pt; margin-right:0cm;
       margin-bottom:2.0pt; margin-left:0cm; text-align:right;
       page-break-after:avoid; font-size:25.0pt; font-family:"Franklin Gothic
-      Demi",sans-serif; color:black; text-transform:uppercase;
+      Demi",sans-serif; color:black; text-transform:uppercase !important;
       font-weight:normal;} h1.CxSpFirst {mso-style-link:"Heading 1 Char";
       margin-top:3.0pt; margin-right:0cm; margin-bottom:0cm; margin-left:0cm;
       text-align:right; page-break-after:avoid; font-size:25.0pt;
@@ -99,6 +99,87 @@
 
   <body lang="EN-IN" style="word-wrap: break-word">
     <div class="WordSection1">
+
+      <table
+        width="100%"
+        cellpadding="0"
+        cellspacing="0"
+        style="
+          border-collapse: collapse;
+         margin-top: 40px;
+          margin-left: 25px;
+        "
+      >
+        <tr>
+          <!-- Red Bar Section with visible overflow -->
+          <td
+            style="
+              background-color: #ea4e4e;
+              padding: 25px 30px;
+              position: relative;
+              overflow: visible; /* 👈 Key Fix */
+            "
+          >
+            <div style="display: flex; align-items: center; position: relative">
+              <!-- Initials Circle -->
+              <div
+                style="
+                  position: absolute;
+                  left: -60px;
+                  width: 150px;
+                  height: 150px;
+                  background-color: white;
+                  border: 4px solid #ea4e4e;
+                  border-radius: 50%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-family: 'Franklin Gothic Demi', sans-serif;
+                  font-size: 32pt;
+                  font-weight: bold;
+                  color: #ea4e4e;
+                  z-index: 10;
+                "
+              >
+                {{initials}}
+              </div>
+
+              <!-- Text Content (Right-Aligned) -->
+              <div style="flex: 1; text-align: right; padding-left: 80px">
+                <div
+                  style="
+                    font-family: 'Franklin Gothic Demi', sans-serif;
+                    font-size: 16pt;
+                    font-weight: bold;
+                    color: black;
+                    text-transform: uppercase;
+                  "
+                >
+                  {{name}}
+                </div>
+                <div
+                  style="
+                    font-family: Rockwell, serif;
+                    font-size: 9.5pt;
+                    text-transform: uppercase;
+                    color: black;
+                    margin-top: 4px;
+                  "
+                >
+                  {{location}}
+                  |
+                  {{email}}
+                  |
+                  {{phoneNumber}}
+                  |
+                  {{jobTitle}}
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </table>
+
       <table
         class="MsoNormalTable"
         border="0"
@@ -109,7 +190,6 @@
         <tr>
           <!-- Left Column -->
           <td width="252" valign="top" style="padding: 25.2pt 36pt 0cm 0cm">
-            <p class="Initials">{{initials}}</p>
 
             <div
               style="border-bottom: solid #ea4e4e 6pt; padding: 0cm 0cm 1pt 0cm"
@@ -130,27 +210,6 @@
 
           <!-- Right Column -->
           <td width="449" valign="top" style="padding: 25.2pt 0cm 0cm 0cm">
-            <table
-              class="MsoTableGrid"
-              border="0"
-              cellspacing="0"
-              cellpadding="0"
-              width="100%"
-              style="border: none"
-            >
-              <tr style="height: 57.6pt">
-                <td style="padding: 0cm 21.6pt 48.25pt 0cm;">
-                  <h1 style="text-align: left">{{name}}</h1>
-                  <h2 style="text-align: left">
-                    {{location}}
-                    {{email}}
-                    {{phoneNumber}}
-                    {{jobTitle}}
-                    {{linkedin}}
-                  </h2>
-                </td>
-              </tr>
-            </table>
 
             <!-- Experience -->
             {{#if experience.length}}
