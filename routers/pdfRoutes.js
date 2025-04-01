@@ -9,7 +9,7 @@ router.post("/resume/download-pdf", async (req, res) => {
     const { templatename, ...resumeData } = req.body;
 
     const data = resumeData?.resumeData
-    const tempName = resumeData?.templatename
+    const tempName = resumeData?.resumeData?.templatename
     // if (!templatename || !resumeData) {
     //     return res.status(400).json({ error: "templatename and data are required." });
     // }
