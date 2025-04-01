@@ -17,7 +17,7 @@ steps:
     displayName: node
   - script: npm install --force
     displayName: npm
-  - script: sudo tar -czvf pln1000009.tar.gz .env *;
+  - script: sudo tar -czvf pln1000009.tar.gz *;
     displayName: Create tar.gz Archive of Build Files
   - task: PublishBuildArtifacts@1
     inputs:
