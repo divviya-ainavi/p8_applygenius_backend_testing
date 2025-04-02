@@ -47,12 +47,12 @@
       font-family:"Arial",sans-serif; color:#404040;} .MsoChpDefault
       {font-size:12.0pt; font-family:"Arial",sans-serif;} /* Page Definitions */
       @page WordSection1 {size:595.3pt 841.9pt; margin:36.0pt 36.0pt 36.0pt
-      36.0pt;} div.WordSection1 {page:WordSection1;} /* List Definitions */ ol
-      {margin-bottom:0cm;} ul {margin-bottom:0cm;} -->
+      36.0pt; line-height: 1.6;} div.WordSection1 {page:WordSection1;} /* List
+      Definitions */ ol {margin-bottom:0cm;} ul {margin-bottom:0cm;} -->
     </style>
   </head>
   <body>
-    <div class="WordSection1">
+    <div class="WordSection1" style="line-height:1.6;">
       <table
         border="0"
         cellpadding="0"
@@ -87,7 +87,7 @@
             {{#if summary}}
               <td colspan="3" style="padding: 10px; vertical-align: top;">
                 <h2>Summary</h2>
-                <p class="TextRight">{{summary}}</p>
+                <p class="TextRight" style="line-height:1.6;">{{summary}}</p>
               </td>
             {{/if}}
           </tr>
@@ -122,7 +122,7 @@
                     <p class="SmallText">{{duration}}</p>
                     <p class="TextRight">{{title}} | {{company}}</p>
                     {{#each responsibilities}}
-                      <p class="MsoNormal">
+                      <p class="MsoNormal" style="line-height:1.6;">
                         <span
                           style="font-family: Wingdings; color: #648276"
                         >●</span>

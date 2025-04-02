@@ -48,8 +48,9 @@
       {font-size:10.0pt; font-family:"Tahoma",sans-serif; color:#7F7F7F;}
       .MsoPapDefault {margin-bottom:9.0pt; line-height:130%;} /* Page
       Definitions */ @page WordSection1 {size:21.0cm 841.95pt; margin:64.8pt
-      68.4pt 72.0pt 68.4pt;} div.WordSection1 {page:WordSection1;} /* List
-      Definitions */ ol {margin-bottom:0cm;} ul {margin-bottom:0cm;} -->
+      68.4pt 72.0pt 68.4pt; line-height: 1.6;} div.WordSection1
+      {page:WordSection1;} /* List Definitions */ ol {margin-bottom:0cm;} ul
+      {margin-bottom:0cm;} -->
     </style>
   </head>
 
@@ -89,7 +90,7 @@
         </div>
         {{#each experience}}
           <div>
-            <p class="MsoNormal">{{company}}</p>
+            <p class="MsoNormal" style="font-weight: bold;">{{company}}</p>
             <p class="MsoNormal">
               {{title}}
               {{#if title}} | {{/if}}
