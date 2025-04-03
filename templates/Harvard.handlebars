@@ -21,7 +21,7 @@
       padding-bottom: 15px; border-bottom: 1px solid #d4d4d4; font-size: 20px;
       font-weight: bold; color: #000; } .info { font-size: 16px; color: #000; }
       .experience-item, .skills-list { margin-bottom: 20px; } .experience-item
-      h3 { margin: 5px 0; display: flex; justify-content: space-between; }
+      h4 { margin: 5px 0; display: flex; justify-content: space-between; }
       .experience-dates { font-weight: bold; } .skills-container { display:
       flex; flex-wrap: wrap; justify-content: space-between; padding: 10px 0; }
       .skills-column { width: 30%; text-align: left; font-weight: bold; padding:
@@ -31,7 +31,7 @@
       margin-bottom: 5px; /* Space between bullet points */ } .bullet-list
       li::before { content: "●"; /* Unicode bullet symbol */ color: black; /*
       Change this to your desired bullet color */ font-size: 10px; /* Adjust
-      bullet size */ position: absolute; left: 0; top: 0; } .education-item {
+      bullet size */ position: absolute; left: 0; top: 5; } .education-item {
       display: flex; flex-direction: column; /* Stack items vertically */ }
       .education-details { display: flex; justify-content: space-between; /*
       Degree on the left, Date on the right */ align-items: center; }
@@ -74,10 +74,10 @@
         <h2 class="section-title">EXPERIENCE</h2>
         {{#each experience}}
           <div class="experience-item">
-            <h3>
+            <h4>
               <strong>{{title}}{{#if company}} | {{company}}{{/if}}</strong>
               <span class="experience-dates">{{duration}}</span>
-            </h3>
+            </h4>
             {{#if responsibilities.length}}
               <ul class="bullet-list">
                 {{#each responsibilities}}

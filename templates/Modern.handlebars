@@ -35,20 +35,21 @@
       span.Heading1Char {mso-style-name:"Heading 1 Char";
       mso-style-link:"Heading 1"; font-family:"Georgia",serif; color:#648276;
       font-weight:bold;} p.TextLeft, li.TextLeft, div.TextLeft
-      {mso-style-name:TextLeft; margin:0cm; text-align:right; line-height:120%;
+      {mso-style-name:TextLeft; margin:0cm; text-align:right; line-height:1.6;
       font-size:11.0pt; font-family:"Arial",sans-serif; color:#404040;}
       span.Heading2Char {mso-style-name:"Heading 2 Char";
       mso-style-link:"Heading 2"; font-family:"Georgia",serif; color:#648276;
       font-weight:bold;} p.SmallText, li.SmallText, div.SmallText
       {mso-style-name:SmallText; margin:0cm; font-size:10.0pt;
-      font-family:"Arial",sans-serif; color:#404040; font-style:italic;}
-      p.TextRight, li.TextRight, div.TextRight {mso-style-name:TextRight;
-      margin:0cm; line-height:120%; font-size:11.0pt;
-      font-family:"Arial",sans-serif; color:#404040;} .MsoChpDefault
-      {font-size:12.0pt; font-family:"Arial",sans-serif;} /* Page Definitions */
-      @page WordSection1 {size:595.3pt 841.9pt; margin:36.0pt 36.0pt 36.0pt
-      36.0pt; line-height: 1.6;} div.WordSection1 {page:WordSection1;} /* List
-      Definitions */ ol {margin-bottom:0cm;} ul {margin-bottom:0cm;} -->
+      font-family:"Arial",sans-serif; color:#404040; font-style:italic;
+      line-height: 1.6;} p.TextRight, li.TextRight, div.TextRight
+      {mso-style-name:TextRight; margin:0cm; line-height:120%; font-size:11.0pt;
+      font-family:"Arial",sans-serif; color:#404040; line-height: 1.6;}
+      .MsoChpDefault {font-size:12.0pt; font-family:"Arial",sans-serif;} /* Page
+      Definitions */ @page WordSection1 {size:595.3pt 841.9pt; margin:36.0pt
+      36.0pt 36.0pt 36.0pt; line-height: 1.6;} div.WordSection1
+      {page:WordSection1;} /* List Definitions */ ol {margin-bottom:0cm;} ul
+      {margin-bottom:0cm;} -->
     </style>
   </head>
   <body>
@@ -158,14 +159,18 @@
                   <div
                     style="border-bottom: 1pt solid #648276; margin-bottom: 10px;"
                   >
-                    <h2>{{title}}</h2>
+                    <h2 style="line-height: 1.6;">{{title}}</h2>
                     {{#each items}}
                       <p class="TextRight"><b>{{title}}</b>{{#if location}}
                           |
                           {{location}}{{/if}}</p>
                       <p class="TextRight">{{date}}</p>
-                      <p class="MsoNormal">{{description}}</p>
+                      <p
+                        class="MsoNormal"
+                        style="line-height: 1.6;"
+                      >{{description}}</p>
                     {{/each}}
+
                   </div>
                 {{/each}}
               </td>
