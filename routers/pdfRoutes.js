@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const { generatePdfBuffer } = require("../controllers/generatepdf");
+const { generatePdfBuffer, generateHtmlPreview } = require("../controllers/generatepdf");
 
 const router = express.Router();
 
@@ -10,6 +10,8 @@ router.post("/resume/download-pdf", async (req, res) => {
 
     const data = resumeData?.resumeData
     const tempName = resumeData?.resumeData?.templatename
+    // const data = resumeData
+    // const tempName = templatename
     // if (!templatename || !resumeData) {
     //     return res.status(400).json({ error: "templatename and data are required." });
     // }
@@ -32,6 +34,21 @@ router.post("/resume/download-pdf", async (req, res) => {
     } catch (error) {
         console.error("PDF generation error:", error);
         return res.status(500).json({ error: "Failed to generate PDF." });
+    }
+});
+
+router.get("/preview-template", async (req, res) => {
+    const { ...resumeData } = req.body;
+    const data = resumeData?.resumeData
+    const tempName = resumeData?.resumeData?.templatename || "Harvard"
+    // console.log(data, "template name")
+    try {
+        const html = await generateHtmlPreview(tempName, data);
+        res.setHeader("Content-Type", "text/html");
+        res.send(html);
+    } catch (err) {
+        console.error("HTML preview generation failed:", err);
+        res.status(500).json({ error: "Failed to generate HTML preview" });
     }
 });
 
