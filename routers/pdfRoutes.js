@@ -40,7 +40,7 @@ router.post("/resume/download-pdf", async (req, res) => {
 router.get("/preview-template", async (req, res) => {
     const { ...resumeData } = req.body;
     const data = resumeData?.resumeData
-    const tempName = resumeData?.resumeData?.templatename || "Harvard"
+    const tempName = "Harvard"
     // console.log(data, "template name")
     try {
         const html = await generateHtmlPreview(tempName, data);
