@@ -219,11 +219,11 @@
               </div>
               {{#each experience}}
                 <h4>
-                  <strong>
-                    {{title}}
-                    {{#if company}} ● {{company}}{{/if}}
-                    {{#if duration}} ● {{duration}}{{/if}}
-                  </strong>
+
+                  {{title}}
+                  {{#if company}} ● {{company}}{{/if}}
+                  {{#if duration}} ● {{duration}}{{/if}}
+
                 </h4>
                 {{#each responsibilities}}
                   <p class="MsoNormal" style="line-height: 1.6;">{{this}}</p>
@@ -240,11 +240,11 @@
               </div>
               {{#each education}}
                 <h4>
-                  <strong>
-                    {{degree}}
-                    {{#if year}} ● {{year}}{{/if}}
-                    {{#if institution}} ● {{institution}}{{/if}}
-                  </strong>
+
+                  {{degree}}
+                  {{#if year}} ● {{year}}{{/if}}
+                  {{#if institution}} ● {{institution}}{{/if}}
+
                 </h4>
                 <p class="MsoNormal">{{score}}</p>
               {{/each}}
@@ -260,11 +260,11 @@
                 </div>
                 {{#each items}}
                   <h4>
-                    <strong>
-                      {{title}}
-                      {{#if date}} ● {{date}}{{/if}}
-                      {{#if location}} ● {{location}}{{/if}}
-                    </strong>
+
+                    {{title}}
+                    {{#if date}} ● {{date}}{{/if}}
+                    {{#if location}} ● {{location}}{{/if}}
+
                   </h4>
                   <p class="MsoNormal">{{description}}</p>
                 {{/each}}

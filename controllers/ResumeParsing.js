@@ -209,18 +209,28 @@ exports.parseResume = async (req, res) => {
             messages: [
                 {
                     role: 'user',
-                    content: `Extract only job experience from the resume text.
-    Return only valid JSON in the format:
+                    content: `Extract detailed work experience from the resume below. For each job, include:
     
-    "experience": [
-      {
-        "from": "",
-        "to": "",
-        "companyName": "",
-        "position": "",
-        "responsibilities": ""
-      }
-    ]
+    - Start and end dates
+    - Company name
+    - Position title
+    - Responsibilities (return as an array of bullet points, without bullet symbols or newline characters)
+    
+    Return a JSON object with the following format:
+    
+    {
+      "experience": [
+        {
+          "from": "Start date",
+          "to": "End date or Present",
+          "companyName": "Company name",
+          "position": "Job title",
+          "responsibilities": ["Responsibility 1", "Responsibility 2", "Responsibility 3"]
+        }
+      ]
+    }
+    
+    Only return valid JSON. Do not include explanations or markdown formatting.
     
     Resume Text:
     ${resumeText}`

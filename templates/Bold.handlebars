@@ -99,7 +99,7 @@
             {{#if responsibilities.length}}
               {{#each responsibilities}}
                 <p class="MsoListBullet"><span
-                    style="font-family: Wingdings; color: #e3ab47"
+                    style="font-family: Wingdings; color: #e3ab47 ; font-size: 10px; margin-right: 2px;"
                   >●</span>
                   {{this}}</p>
               {{/each}}
@@ -152,7 +152,9 @@
           </div>
           {{#each items}}
             <p class="MsoListBullet">
-              <span style="font-family: Wingdings; color: #e3ab47">●</span>
+              <span
+                style="font-family: Wingdings; color: #e3ab47; font-size: 10px; margin-right: 2px;"
+              >●</span>
               <strong>{{title}}</strong>
               {{#if location}} | <strong>{{location}}</strong>{{/if}}
               {{#if date}} | {{date}}{{/if}}
