@@ -4,7 +4,8 @@ const pdfRoutes = require("./routers/pdfRoutes");
 const resumeRoutes = require('./routers/resumeRoutes');
 const dotenv = require('dotenv');
 
-dotenv.config();
+// dotenv.config();
+dotenv.config({ path: '/home/devops/deploy/UI_env/.env' });
 
 const app = express();
 const PORT = 2000;
