@@ -221,8 +221,12 @@
                 <h4>
 
                   {{title}}
-                  {{#if company}} ● {{company}}{{/if}}
-                  {{#if duration}} ● {{duration}}{{/if}}
+                  {{#if company}}
+                    <span style="font-size: 10px;">●</span>
+                    {{company}}{{/if}}
+                  {{#if duration}}
+                    <span style="font-size: 10px;">●</span>
+                    {{duration}}{{/if}}
 
                 </h4>
                 {{#each responsibilities}}
@@ -242,8 +246,12 @@
                 <h4>
 
                   {{degree}}
-                  {{#if year}} ● {{year}}{{/if}}
-                  {{#if institution}} ● {{institution}}{{/if}}
+                  {{#if year}}
+                    <span style="font-size: 10px;">●</span>
+                    {{year}}{{/if}}
+                  {{#if institution}}
+                    <span style="font-size: 10px;">●</span>
+                    {{institution}}{{/if}}
 
                 </h4>
                 <p class="MsoNormal">{{score}}</p>
@@ -262,8 +270,12 @@
                   <h4>
 
                     {{title}}
-                    {{#if date}} ● {{date}}{{/if}}
-                    {{#if location}} ● {{location}}{{/if}}
+                    {{#if date}}
+                      <span style="font-size: 10px;">●</span>
+                      {{date}}{{/if}}
+                    {{#if location}}
+                      <span style="font-size: 10px;">●</span>
+                      {{location}}{{/if}}
 
                   </h4>
                   <p class="MsoNormal">{{description}}</p>

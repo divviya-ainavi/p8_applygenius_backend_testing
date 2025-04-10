@@ -67,7 +67,10 @@
             style="border-bottom: 2.25pt solid #648276; padding: 10px;"
           >
             <p class="MsoTitle" style="margin-left: 40px;">{{name}}</p>
-            <p class="MsoSubtitle" style="margin-left: 40px;">{{jobTitle}}</p>
+            <p
+              class="MsoSubtitle"
+              style="margin-left: 40px;margin-top: 10px;"
+            >{{jobTitle}}</p>
           </td>
         </tr>
 
@@ -78,7 +81,7 @@
               colspan="2"
               style="border-right: 2.25pt solid #648276; padding: 10px; vertical-align: top;"
             >
-
+              <p style="margin-top: 8px;"></p>
               <h1>Contact</h1>
               {{#if location}}<p class="TextLeft">{{location}}</p>{{/if}}
               {{#if phoneNumber}}<p class="TextLeft">{{phoneNumber}}</p>{{/if}}
@@ -102,7 +105,7 @@
                 colspan="2"
                 style="border-right: 2.25pt solid #648276; padding: 10px; vertical-align: top;"
               >
-
+                <p style="margin-top: 8px;"></p>
                 <h1>Education</h1>
                 {{#each education}}
                   <div>
@@ -145,7 +148,7 @@
                 colspan="2"
                 style="border-right: 2.25pt solid #648276; padding: 10px; vertical-align: top;"
               >
-
+                <p style="margin-top: 8px;"></p>
                 <h1>Key Skills</h1>
                 {{#each skills}}
                   <p class="TextLeft">{{this}}</p>
