@@ -146,7 +146,7 @@ exports.parseResume = async (req, res) => {
     try {
         const generalPrompt = {
             model: 'gpt-3.5-turbo',
-            temperature: 0.2,
+            temperature: 0,
             max_tokens: 800,
             messages: [
                 {
@@ -204,7 +204,7 @@ exports.parseResume = async (req, res) => {
 
         const experiencePrompt = {
             model: 'gpt-4o',
-            temperature: 0.2,
+            temperature: 0,
             max_tokens: 2000,
             messages: [
                 {
