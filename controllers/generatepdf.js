@@ -76,14 +76,14 @@ const transformResumeData = (data) => {
       data.experience?.map((exp) => ({
         company: exp.companyName,
         title: exp.position,
-        duration: `${formatDateExp(exp?.from, exp?.to) || ""} ${exp.from && "-"} ${formatDate(exp.to) || "Present"}`,
+        duration: `${formatDateExp(exp?.from, exp?.to) || ""} ${exp.from && "-"} ${formatDateExp(exp.to) || "Present"}`,
         responsibilities: exp.keyAchievements || [],
       })) || [],
     education:
       data.education?.map((ed) => ({
         degree: ed.degree,
         institution: ed.institution,
-        year: `${formatDateExp(ed?.from, exp?.to) || ""} ${ed.from && ed.to && "-"} ${formatDateExp(ed?.to) || "Present"}`,
+        year: `${formatDateExp(ed?.from, ed?.to) || ""} ${ed.from && ed.to && "-"} ${formatDateExp(ed?.to) || "Present"}`,
         score: ed.description,
       })) || [],
     customsections:
