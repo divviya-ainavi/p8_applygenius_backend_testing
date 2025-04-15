@@ -219,11 +219,15 @@
               </div>
               {{#each experience}}
                 <h4>
-                  <strong>
-                    {{title}}
-                    {{#if company}} ● {{company}}{{/if}}
-                    {{#if duration}} ● {{duration}}{{/if}}
-                  </strong>
+
+                  {{title}}
+                  {{#if company}}
+                    <span style="font-size: 10px;">●</span>
+                    {{company}}{{/if}}
+                  {{#if duration}}
+                    <span style="font-size: 10px;">●</span>
+                    {{duration}}{{/if}}
+
                 </h4>
                 {{#each responsibilities}}
                   <p class="MsoNormal" style="line-height: 1.6;">{{this}}</p>
@@ -240,11 +244,15 @@
               </div>
               {{#each education}}
                 <h4>
-                  <strong>
-                    {{degree}}
-                    {{#if year}} ● {{year}}{{/if}}
-                    {{#if institution}} ● {{institution}}{{/if}}
-                  </strong>
+
+                  {{degree}}
+                  {{#if year}}
+                    <span style="font-size: 10px;">●</span>
+                    {{year}}{{/if}}
+                  {{#if institution}}
+                    <span style="font-size: 10px;">●</span>
+                    {{institution}}{{/if}}
+
                 </h4>
                 <p class="MsoNormal">{{score}}</p>
               {{/each}}
@@ -260,11 +268,15 @@
                 </div>
                 {{#each items}}
                   <h4>
-                    <strong>
-                      {{title}}
-                      {{#if date}} ● {{date}}{{/if}}
-                      {{#if location}} ● {{location}}{{/if}}
-                    </strong>
+
+                    {{title}}
+                    {{#if date}}
+                      <span style="font-size: 10px;">●</span>
+                      {{date}}{{/if}}
+                    {{#if location}}
+                      <span style="font-size: 10px;">●</span>
+                      {{location}}{{/if}}
+
                   </h4>
                   <p class="MsoNormal">{{description}}</p>
                 {{/each}}
