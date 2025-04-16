@@ -1,13 +1,13 @@
 trigger:
   branches:
     include:
-      - main
+      - Dev
   paths:
     exclude:
       - '*'
 variables:
-  Devozy_DUMMY_VARIABLE: ID_FRcRJdSB
-  IMAGE_NAME: PLN1000011_MERN_Development
+  Devozy_DUMMY_VARIABLE: ID_iDJthwjI
+  IMAGE_NAME: PLN1000003_MERN_Development
 pool:
   vmImage: ubuntu-latest
 steps:
@@ -17,9 +17,9 @@ steps:
     displayName: node
   - script: npm install --force
     displayName: npm
-  - script: sudo tar -czvf pln1000011.tar.gz  *;
+  - script: sudo tar -czvf pln1000003.tar.gz *;
     displayName: Create tar.gz Archive of Build Files
   - task: PublishBuildArtifacts@1
     inputs:
-      pathtoPublish: $(System.DefaultWorkingDirectory)/pln1000011.tar.gz
+      pathtoPublish: $(System.DefaultWorkingDirectory)/pln1000003.tar.gz
       artifactName: react-build
