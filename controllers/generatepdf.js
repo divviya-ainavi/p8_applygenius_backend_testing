@@ -17,8 +17,8 @@ hbs.handlebars.registerHelper("or", function () {
 // Transform data function
 
 const formatDateExp = (dateString, todateString) => {
-  console.log(dateString, "date string");
-  console.log(todateString, "to date string");
+  // console.log(dateString, "date string");
+  // console.log(todateString, "to date string");
 
   if (!dateString || typeof dateString !== "string") return "";
 
@@ -40,7 +40,7 @@ const formatDateExp = (dateString, todateString) => {
   ];
 
   const parsed = moment(dateString, formats, true); // strict parsing
-  console.log(todateString, "to date string");
+  // console.log(todateString, "to date string");
   return parsed.isValid()
     ? (["present", "till date"].includes(
       todateString?.toLowerCase()?.trim()
@@ -131,13 +131,13 @@ async function generatePdfBuffer(templateName, resumeData) {
 }
 
 async function generateHtmlPreview(templateName, resumeData) {
-  console.log("preview api called")
+  // console.log("preview api called")
   const templatePath = path.join(__dirname, "../templates", `${templateName || "Harvard"}.handlebars`);
   const rawTemplate = await fs.readFile(templatePath, "utf-8");
   const compiled = hbs.handlebars.compile(rawTemplate);
   const transformedData = transformResumeData(resumeData);
 
-  console.log(transformResumeData, "transformed data ")
+  // console.log(transformResumeData, "transformed data ")
 
   const filledHTML = compiled(transformedData);
 

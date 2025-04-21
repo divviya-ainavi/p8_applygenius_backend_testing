@@ -65,8 +65,10 @@ router.post("/resume/download-docx", async (req, res) => {
 });
 
 router.post("/resume/download", async (req, res) => {
-    const { format = "pdf", ...resumeData } = req.body;
-
+    const { ...resumeData } = req.body;
+    console.log(resumeData, "resume data")
+    const format = resumeData?.resumeData?.format || "pdf";
+    console.log(format, "format")
     const data = resumeData?.resumeData;
     const templateName = data?.templatename || "Harvard";
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
