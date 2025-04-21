@@ -3,6 +3,8 @@ const { create } = require("express-handlebars");
 const path = require("path");
 const fs = require("fs/promises");
 const moment = require("moment");
+const htmlToDocx = require("html-to-docx");
+
 
 // Setup Handlebars
 const hbs = create({ extname: ".handlebars", defaultLayout: false });
@@ -187,6 +189,43 @@ async function generateHtmlPreview(templateName, resumeData) {
   return fullHTML;
 }
 
+async function generateDocxBuffer(templateName, resumeData) {
+  const templatePath = path.join(__dirname, "../templates", `${templateName}.handlebars`);
+  const rawTemplate = await fs.readFile(templatePath, "utf-8");
+  const compiled = hbs.handlebars.compile(rawTemplate);
+  const transformedData = transformResumeData(resumeData);
+  const filledHTML = compiled(transformedData);
+
+  const htmlWrapper = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <title>Resume</title>
+      <style>
+        body { font-family: Arial, sans-serif; font-size: 12pt; }
+        table { width: 100%; }
+      </style>
+    </head>
+    <body>
+      ${filledHTML}
+    </body>
+    </html>
+  `;
+
+  const docxBuffer = await htmlToDocx(htmlWrapper, null, {
+    table: { row: { cantSplit: true } },
+    footer: true,
+    pageNumber: true,
+  });
+
+  return docxBuffer;
+}
+
+module.exports = {
+  generatePdfBuffer,
+  generateHtmlPreview,
+  generateDocxBuffer,
+};
 
 
-module.exports = { generatePdfBuffer, generateHtmlPreview };
