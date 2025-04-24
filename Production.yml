@@ -1,0 +1,25 @@
+trigger:
+  branches:
+    include:
+      - main
+  paths:
+    exclude:
+      - '*'
+variables:
+  Devozy_DUMMY_VARIABLE: ID_litEpoHI
+  IMAGE_NAME: PLN1000004_MERN_Production
+pool:
+  vmImage: ubuntu-latest
+steps:
+  - task: PublishBuildArtifacts@1
+    inputs:
+      versionSpec: 22.15.0
+    displayName: node
+  - script: npm install --force
+    displayName: npm
+  - script: sudo tar -czvf pln1000004.tar.gz *;
+    displayName: Create tar.gz Archive of Build Files
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: $(System.DefaultWorkingDirectory)/pln1000004.tar.gz
+      artifactName: react-build
