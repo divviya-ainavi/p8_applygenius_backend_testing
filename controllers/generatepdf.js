@@ -85,7 +85,7 @@ const transformResumeData = (data) => {
       data.education?.map((ed) => ({
         degree: ed.degree,
         institution: ed.institution,
-        year: `${formatDateExp(ed?.from, ed?.to) || ""} ${ed.from && ed.to && "-"} ${formatDateExp(ed?.to) || "Present"}`,
+        year: `${formatDateExp(ed?.from, ed?.to) || ""} ${ed.from && ed.to && "-"} ${formatDateExp(ed?.to)}`,
         score: ed.description,
       })) || [],
     customsections:
