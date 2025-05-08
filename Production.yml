@@ -4,11 +4,10 @@ trigger:
       - main
   paths:
     exclude:
-      - "*"
+      - '*'
 variables:
-  Devozy_DUMMY_VARIABLE: ID_litEpoHI
+  Devozy_DUMMY_VARIABLE: ID_KZy9NG06
   IMAGE_NAME: PLN1000004_MERN_Production
-
 pool:
   vmImage: ubuntu-latest
 steps:
