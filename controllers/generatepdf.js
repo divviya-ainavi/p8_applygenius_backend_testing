@@ -16,7 +16,7 @@ hbs.handlebars.registerHelper("or", function () {
 });
 // Transform data function
 
-const formatDateExp = (dateString, todateString) => {
+const formatDateExp = (dateString, todateString, type) => {
   // console.log(dateString, "date string");
   // console.log(todateString, "to date string");
 
@@ -42,12 +42,12 @@ const formatDateExp = (dateString, todateString) => {
   const parsed = moment(dateString, formats, true); // strict parsing
   // console.log(todateString, "to date string");
   return parsed.isValid()
-    ? (["present", "till date"].includes(
+    ? ((["present", "till date"].includes(
       todateString?.toLowerCase()?.trim()
     ) ||
       todateString == "" ||
       todateString == null) &&
-      todateString != undefined
+      todateString != undefined || type == "education")
       ? parsed.format("MMM YYYY")
       : parsed.format("YYYY")
     : "";
@@ -85,7 +85,7 @@ const transformResumeData = (data) => {
       data.education?.map((ed) => ({
         degree: ed.degree,
         institution: ed.institution,
-        year: `${formatDateExp(ed?.from, ed?.to) || ""} ${ed.from && ed.to && "-"} ${formatDateExp(ed?.to)}`,
+        year: `${formatDateExp(ed?.from, ed?.to, "education") || ""} ${ed.from && ed.to && "-"} ${formatDateExp(ed?.to, "", "education")}`,
         score: ed.description,
       })) || [],
     customsections:
