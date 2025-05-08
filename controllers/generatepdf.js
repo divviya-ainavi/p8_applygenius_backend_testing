@@ -3,6 +3,8 @@ const { create } = require("express-handlebars");
 const path = require("path");
 const fs = require("fs/promises");
 const moment = require("moment");
+const htmlToDocx = require("html-to-docx");
+
 
 // Setup Handlebars
 const hbs = create({ extname: ".handlebars", defaultLayout: false });
@@ -14,9 +16,9 @@ hbs.handlebars.registerHelper("or", function () {
 });
 // Transform data function
 
-const formatDateExp = (dateString, todateString) => {
-  console.log(dateString, "date string");
-  console.log(todateString, "to date string");
+const formatDateExp = (dateString, todateString, type) => {
+  // console.log(dateString, "date string");
+  // console.log(todateString, "to date string");
 
   if (!dateString || typeof dateString !== "string") return "";
 
@@ -38,14 +40,14 @@ const formatDateExp = (dateString, todateString) => {
   ];
 
   const parsed = moment(dateString, formats, true); // strict parsing
-  console.log(todateString, "to date string");
+  // console.log(todateString, "to date string");
   return parsed.isValid()
-    ? (["present", "till date"].includes(
+    ? ((["present", "till date"].includes(
       todateString?.toLowerCase()?.trim()
     ) ||
       todateString == "" ||
       todateString == null) &&
-      todateString != undefined
+      todateString != undefined || type == "education")
       ? parsed.format("MMM YYYY")
       : parsed.format("YYYY")
     : "";
@@ -83,7 +85,7 @@ const transformResumeData = (data) => {
       data.education?.map((ed) => ({
         degree: ed.degree,
         institution: ed.institution,
-        year: `${formatDateExp(ed?.from, ed?.to) || ""} ${ed.from && ed.to && "-"} ${formatDateExp(ed?.to) || "Present"}`,
+        year: `${formatDateExp(ed?.from, ed?.to, "education") || ""} ${ed.from && ed.to && "-"} ${formatDateExp(ed?.to, "", "education")}`,
         score: ed.description,
       })) || [],
     customsections:
@@ -129,13 +131,13 @@ async function generatePdfBuffer(templateName, resumeData) {
 }
 
 async function generateHtmlPreview(templateName, resumeData) {
-  console.log("preview api called")
+  // console.log("preview api called")
   const templatePath = path.join(__dirname, "../templates", `${templateName || "Harvard"}.handlebars`);
   const rawTemplate = await fs.readFile(templatePath, "utf-8");
   const compiled = hbs.handlebars.compile(rawTemplate);
   const transformedData = transformResumeData(resumeData);
 
-  console.log(transformResumeData, "transformed data ")
+  // console.log(transformResumeData, "transformed data ")
 
   const filledHTML = compiled(transformedData);
 
@@ -187,6 +189,43 @@ async function generateHtmlPreview(templateName, resumeData) {
   return fullHTML;
 }
 
+async function generateDocxBuffer(templateName, resumeData) {
+  const templatePath = path.join(__dirname, "../templates", `${templateName}.handlebars`);
+  const rawTemplate = await fs.readFile(templatePath, "utf-8");
+  const compiled = hbs.handlebars.compile(rawTemplate);
+  const transformedData = transformResumeData(resumeData);
+  const filledHTML = compiled(transformedData);
+
+  const htmlWrapper = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <title>Resume</title>
+      <style>
+        body { font-family: Arial, sans-serif; font-size: 12pt; }
+        table { width: 100%; }
+      </style>
+    </head>
+    <body>
+      ${filledHTML}
+    </body>
+    </html>
+  `;
+
+  const docxBuffer = await htmlToDocx(htmlWrapper, null, {
+    table: { row: { cantSplit: true } },
+    footer: true,
+    pageNumber: true,
+  });
+
+  return docxBuffer;
+}
+
+module.exports = {
+  generatePdfBuffer,
+  generateHtmlPreview,
+  generateDocxBuffer,
+};
 
 
-module.exports = { generatePdfBuffer, generateHtmlPreview };
