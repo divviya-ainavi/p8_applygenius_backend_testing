@@ -201,8 +201,8 @@ exports.parseResume = async (req, res) => {
       "awardsandAcknowledgements": [],
       "interests": [],
       "achievements": [
-    "Reduced shrinkage by 10%",
-    "Improved compliance reporting efficiency by 25%"
+    "",
+    ""
   ]
     }
     
