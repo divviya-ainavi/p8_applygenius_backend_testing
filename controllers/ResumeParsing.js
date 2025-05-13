@@ -200,7 +200,10 @@ exports.parseResume = async (req, res) => {
       "references": "",
       "awardsandAcknowledgements": [],
       "interests": [],
-      "achievements":[],
+      "achievements": [
+    "Reduced shrinkage by 10%",
+    "Improved compliance reporting efficiency by 25%"
+  ]
     }
     
     Resume Text:
