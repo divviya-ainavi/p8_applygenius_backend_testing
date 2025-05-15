@@ -92,7 +92,9 @@
       {font-size:10.0pt; font-family:"Rockwell",serif;} .MsoPapDefault
       {line-height:107%;} /* Page Definitions */ @page WordSection1
       {size:595.3pt 841.9pt; margin:43.2pt 43.2pt 115.2pt 43.2pt;}
-      div.WordSection1 {page:WordSection1;} -->
+      div.WordSection1 {page:WordSection1;} --> .experience-block,
+      .education-block, .custom-block { page-break-inside: avoid; break-inside:
+      avoid;}
     </style>
   </head>
 
@@ -230,7 +232,10 @@
 
                 </h4>
                 {{#each responsibilities}}
-                  <p class="MsoNormal" style="line-height: 1.6;">{{this}}</p>
+                  <p
+                    class="MsoNormal experience-block"
+                    style="line-height: 1.6;"
+                  >{{this}}</p>
                 {{/each}}
               {{/each}}
             {{/if}}
@@ -254,7 +259,7 @@
                     {{institution}}{{/if}}
 
                 </h4>
-                <p class="MsoNormal">{{score}}</p>
+                <p class="MsoNormal education-block">{{score}}</p>
               {{/each}}
             {{/if}}
 
@@ -267,18 +272,21 @@
                   <h3>{{title}}</h3>
                 </div>
                 {{#each items}}
-                  <h4>
+                  {{#if (or title date location)}}
+                    <h4>
+                      {{#if title}}{{title}}{{/if}}
+                      {{#if date}}
+                        <span style="font-size: 10px;">●</span>
+                        {{date}}
+                      {{/if}}
+                      {{#if location}}
+                        <span style="font-size: 10px;">●</span>
+                        {{location}}
+                      {{/if}}
+                    </h4>
+                  {{/if}}
 
-                    {{title}}
-                    {{#if date}}
-                      <span style="font-size: 10px;">●</span>
-                      {{date}}{{/if}}
-                    {{#if location}}
-                      <span style="font-size: 10px;">●</span>
-                      {{location}}{{/if}}
-
-                  </h4>
-                  <p class="MsoNormal">{{description}}</p>
+                  <p class="MsoNormal custom-block">{{description}}</p>
                 {{/each}}
               {{/each}}
             {{/if}}

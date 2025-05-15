@@ -22,23 +22,41 @@
       15px; border-bottom: 1px solid #d4d4d4; font-size: 20px; font-weight:
       bold; color: #000; } .info { font-size: 16px; color: #000; }
       .experience-item, .skills-list { margin-bottom: 20px; } .experience-item
-      h4 { margin: 5px 0; display: flex; justify-content: space-between; }
+      h4 { margin: 5px 0; display: flex; justify-content: space-between; 
+      page-break-inside: avoid;
+  break-inside: avoid;
+  }
       .experience-dates { font-weight: bold; } .skills-container { display:
-      flex; flex-wrap: wrap; justify-content: space-between; padding: 10px 0; }
+      flex; flex-wrap: wrap; justify-content: space-between; padding: 10px 0;
+      page-break-inside: avoid;
+  break-inside: avoid; }
       .skills-column { width: 30%; text-align: left; font-weight: bold; padding:
       5px 0; } .bullet-list { list-style: none; /* Remove default bullets */
       padding-left: 20px; /* Maintain indentation */ } .bullet-list li {
       position: relative; padding-left: 20px; /* Space for the custom bullet */
-      margin-bottom: 5px; /* Space between bullet points */ } .bullet-list
+      margin-bottom: 5px; /* Space between bullet points */
+      page-break-inside: avoid;
+  break-inside: avoid;
+   } .bullet-list
       li::before { content: "●"; /* Unicode bullet symbol */ color: black; /*
       Change this to your desired bullet color */ font-size: 10px; /* Adjust
       bullet size */ position: absolute; left: 0; top: 5; } .education-item {
-      display: flex; flex-direction: column; /* Stack items vertically */ }
+      display: flex; flex-direction: column; /* Stack items vertically */ 
+      page-break-inside: avoid;
+  break-inside: avoid;}
       .education-details { display: flex; justify-content: space-between; /*
       Degree on the left, Date on the right */ align-items: center; }
       .education-dates { white-space: nowrap; /* Prevent wrapping */ text-align:
       right; /* Align text to the right */ min-width: 120px; /* Ensures
       consistent width */ color: #555; /* Subtle color */ }
+      /* Page break handling for Puppeteer */
+
+
+.page-break {
+  page-break-before: always;
+  break-before: page;
+}
+
     </style>
   </head>
   <body>
@@ -65,13 +83,14 @@
       <hr />
 
       {{#if summary}}
-        <h2 class="section-title">SUMMARY</h2>
+      <h2 class="section-title">SUMMARY</h2>
         <p>{{summary}}</p>
         <br />
         <hr />
-      {{/if}}
+       {{/if}}
 
       {{#if experience.length}}
+      <div class="section-block">
         <h2 class="section-title">EXPERIENCE</h2>
         {{#each experience}}
           <div class="experience-item">
@@ -92,9 +111,11 @@
         {{/each}}
         <br />
         <hr />
+      </div>
       {{/if}}
 
       {{#if education.length}}
+      <div class="section-block">
         <h2 class="section-title">EDUCATION</h2>
         {{#each education}}
           <div class="education-item">
@@ -107,9 +128,11 @@
         {{/each}}
         <br />
         <hr />
+      </div>
       {{/if}}
 
       {{#if skills.length}}
+      <div class="section-block">
         <h2 class="section-title">SKILLS</h2>
         <div class="skills-container">
           {{#each skills}}
@@ -120,10 +143,12 @@
         </div>
         <br />
         <hr />
+      </div>
       {{/if}}
 
       {{#if customsections.length}}
         {{#each customsections}}
+        <div class="section-block">
           <h2 class="section-title">{{title}}</h2>
           {{#each items}}
             <div class="education-item">
@@ -135,6 +160,7 @@
               </div>
               <p>{{description}}</p>
             </div>
+        </div>
           {{/each}}
           <br />
           <hr />
