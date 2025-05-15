@@ -14,6 +14,20 @@ const hbs = create({ extname: ".handlebars", defaultLayout: false });
 hbs.handlebars.registerHelper("or", function () {
   return Array.from(arguments).slice(0, -1).some(Boolean);
 });
+
+hbs.handlebars.registerHelper("not", function (value) {
+  return !value;
+});
+
+hbs.handlebars.registerHelper("and", function () {
+  return Array.from(arguments).slice(0, -1).every(Boolean);
+});
+
+hbs.handlebars.registerHelper("orNotEmpty", function (...args) {
+  const options = args.pop(); // remove handlebars options object
+  return args.some(val => typeof val === "string" ? val.trim() !== "" : !!val);
+});
+
 // Transform data function
 
 const formatDateExp = (dateString, todateString, type) => {

@@ -127,20 +127,18 @@
               <td colspan="3" style="padding: 10px; vertical-align: top;">
                 <h2>Experience</h2>
                 {{#each experience}}
-                  <div class="experience-block">
-                    <div>
-                      <p class="SmallText">{{duration}}</p>
-                      <p class="TextRight">{{title}} | {{company}}</p>
-                      {{#each responsibilities}}
-                        <p class="MsoNormal" style="line-height:1.6;">
-                          <span
-                            style="font-family: Wingdings; color: #648276 ; font-size: 10px;"
-                          >●</span>
-                          {{this}}
-                        </p>
-                      {{/each}}
-                    </div><br />
-                  </div>
+                  <div>
+                    <p class="SmallText">{{duration}}</p>
+                    <p class="TextRight">{{title}} | {{company}}</p>
+                    {{#each responsibilities}}
+                      <p class="MsoNormal" style="line-height:1.6;">
+                        <span
+                          style="font-family: Wingdings; color: #648276 ; font-size: 10px;"
+                        >●</span>
+                        {{this}}
+                      </p>
+                    {{/each}}
+                  </div><br />
                 {{/each}}
               </td>
             {{/if}}
@@ -173,7 +171,7 @@
 
                     <h2 style="line-height: 1.6;">{{title}}</h2>
                     {{#each items}}
-                      {{#if (or title location date)}}
+                      {{#if (orNotEmpty title location date)}}
                         <p class="TextRight">
                           {{#if title}}<b>{{title}}</b>{{/if}}
                           {{#if location}} | {{location}}{{/if}}

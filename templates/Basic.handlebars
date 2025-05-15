@@ -272,17 +272,13 @@
                   <h3>{{title}}</h3>
                 </div>
                 {{#each items}}
-                  {{#if (or title date location)}}
+                  {{#if (orNotEmpty title date location)}}
                     <h4>
                       {{#if title}}{{title}}{{/if}}
-                      {{#if date}}
-                        <span style="font-size: 10px;">●</span>
-                        {{date}}
-                      {{/if}}
-                      {{#if location}}
-                        <span style="font-size: 10px;">●</span>
-                        {{location}}
-                      {{/if}}
+                      {{#if date}}<span style="font-size: 10px;">●</span>
+                        {{date}}{{/if}}
+                      {{#if location}}<span style="font-size: 10px;">●</span>
+                        {{location}}{{/if}}
                     </h4>
                   {{/if}}
 

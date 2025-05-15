@@ -154,16 +154,12 @@
           <h2 class="section-title">{{title}}</h2>
           {{#each items}}
             <div class="education-item">
+              {{#if (orNotEmpty title location date)}}
               <div class="education-details">
-                {{#if (or title location)}}
-  <p>
-    {{#if title}}<strong>{{title}}</strong>{{/if}}
-    {{#if location}} | {{location}}{{/if}}
-  </p>
-{{/if}}
-
-                <span class="education-dates">{{date}}</span>
+                <p>{{#if title}}<strong>{{title}}</strong>{{/if}}{{#if location}} | {{location}}{{/if}}</p>
+               {{#if date}} <span class="education-dates">{{date}}</span>{{/if}}
               </div>
+              {{/if}}   
               <p>{{description}}</p>
             </div>
         </div>
