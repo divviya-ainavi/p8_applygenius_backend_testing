@@ -173,10 +173,14 @@
 
                     <h2 style="line-height: 1.6;">{{title}}</h2>
                     {{#each items}}
-                      <p class="TextRight"><b>{{title}}</b>{{#if location}}
-                          |
-                          {{location}}{{/if}}</p>
-                      <p class="TextRight">{{date}}</p>
+                      {{#if (or title location date)}}
+                        <p class="TextRight">
+                          {{#if title}}<b>{{title}}</b>{{/if}}
+                          {{#if location}} | {{location}}{{/if}}
+                        </p>
+                        {{#if date}}<p class="TextRight">{{date}}</p>{{/if}}
+                      {{/if}}
+
                       <p
                         class="MsoNormal"
                         style="line-height: 1.6;"

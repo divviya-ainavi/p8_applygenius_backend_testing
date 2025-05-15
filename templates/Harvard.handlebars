@@ -37,11 +37,17 @@
    } .bullet-list
       li::before { content: "●"; /* Unicode bullet symbol */ color: black; /*
       Change this to your desired bullet color */ font-size: 10px; /* Adjust
-      bullet size */ position: absolute; left: 0; top: 5; } .education-item {
-      display: flex; flex-direction: column; /* Stack items vertically */ 
+      bullet size */ position: absolute; left: 0; top: 5; } 
+      .education-item {
+      display: flex; 
+      flex-direction: column; /* Stack items vertically */ 
       }
-      .education-details { display: flex; justify-content: space-between; /*
-      Degree on the left, Date on the right */ align-items: center; }
+      .education-details { 
+        display: flex; 
+        justify-content: space-between; /*
+      Degree on the left, Date on the right */ 
+      align-items: center;
+       }
       .education-dates { white-space: nowrap; /* Prevent wrapping */ text-align:
       right; /* Align text to the right */ min-width: 120px; /* Ensures
       consistent width */ color: #555; /* Subtle color */ }
@@ -79,7 +85,7 @@
       <hr />
 
       {{#if summary}}
-      <h2 class="section-title">SUMMARYyyy</h2>
+      <h2 class="section-title">SUMMARY</h2>
         <p>{{summary}}</p>
         <br />
         <hr />
@@ -149,9 +155,13 @@
           {{#each items}}
             <div class="education-item">
               <div class="education-details">
-                <p><strong>{{title}}</strong>{{#if location}}
-                    |
-                    {{location}}{{/if}}</p>
+                {{#if (or title location)}}
+  <p>
+    {{#if title}}<strong>{{title}}</strong>{{/if}}
+    {{#if location}} | {{location}}{{/if}}
+  </p>
+{{/if}}
+
                 <span class="education-dates">{{date}}</span>
               </div>
               <p>{{description}}</p>
