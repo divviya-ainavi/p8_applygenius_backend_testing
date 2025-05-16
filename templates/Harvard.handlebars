@@ -69,6 +69,10 @@
   break-inside: avoid;
 }
 
+.skills-wrapper {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
 
     </style>
   </head>
@@ -145,19 +149,22 @@
       {{/if}}
 
       {{#if skills.length}}
-      <div class="section-block">
-        <h2 class="section-title">SKILLS</h2>
-        <div class="skills-container">
-          {{#each skills}}
-            <div class="skills-column">
-              {{#if name}}{{name}}{{else}}{{this}}{{/if}}
-            </div>
-          {{/each}}
-        </div>
-        <br />
-        <hr />
+  <div class="custom-block">
+    <h2 class="section-title">SKILLS</h2>
+    <div class="skills-wrapper"> <!-- ✅ add this -->
+      <div class="skills-container">
+        {{#each skills}}
+          <div class="skills-column">
+            {{#if name}}{{name}}{{else}}{{this}}{{/if}}
+          </div>
+        {{/each}}
       </div>
-      {{/if}}
+    </div> <!-- ✅ close wrapper -->
+    <br />
+    <hr />
+  </div>
+{{/if}}
+
 
       {{#if customsections.length}}
         {{#each customsections}}
