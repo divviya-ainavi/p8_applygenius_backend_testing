@@ -18,9 +18,8 @@
       take too much space */ .contact-info > * { flex-shrink: 1; /* Prevents
       elements from stretching too much */ min-width: auto; max-width: 100%; /*
       Ensures the items stay within bounds */ text-align: center; } hr { border:
-      1px solid #555; } .section-title { margin-bottom: 10px; padding-bottom:
-      15px; border-bottom: 1px solid #d4d4d4; font-size: 18px; font-weight:
-      bold; color: #000; } .info { font-size: 16px; color: #000; }
+      1px solid #555; } .section-title { margin-bottom: 10px; font-size: 18px;
+      font-weight: bold; color: #000; } .info { font-size: 16px; color: #000; }
       .experience-item, .skills-list { margin-bottom: 20px; } .experience-item
       h4 { margin: 5px 0; display: flex; justify-content: space-between; }
       .experience-dates { font-weight: bold; } .skills-container { display:
@@ -75,18 +74,18 @@
             {{linkedinProfile}}</span>{{/if}}
       </div>
       <br />
-      <hr />
 
       {{#if summary}}
         <h2 class="section-title">SUMMARY</h2>
+        <hr />
         <p class="summary-text">{{summary}}</p>
         <br />
-        <hr />
       {{/if}}
 
       {{#if experience.length}}
         <div class="section-block">
           <h2 class="section-title">EXPERIENCE</h2>
+          <hr />
           {{#each experience}}
             <div class="experience-item">
               <h4>
@@ -105,13 +104,13 @@
             </div>
           {{/each}}
           <br />
-          <hr />
         </div>
       {{/if}}
 
       {{#if education.length}}
         <div class="custom-block">
           <h2 class="section-title">EDUCATION</h2>
+          <hr />
           {{#each education}}
             <div class="education-item">
               <div class="education-details">
@@ -122,13 +121,13 @@
             </div>
           {{/each}}
           <br />
-          <hr />
         </div>
       {{/if}}
 
       {{#if skills.length}}
         <div class="custom-block">
           <h2 class="section-title">SKILLS</h2>
+          <hr />
           <div class="skills-wrapper">
             <!-- ✅ add this -->
             <div class="skills-container">
@@ -141,7 +140,6 @@
           </div>
           <!-- ✅ close wrapper -->
           <br />
-          <hr />
         </div>
       {{/if}}
 
@@ -170,6 +168,7 @@
         {{#each customsections}}
           <div class="section-block custom-section-block">
             <h2 class="section-title">{{title}}</h2>
+            <hr />
             <ul class="custom-description-list">
               {{#each items}}
                 {{#if (orNotEmpty title location date)}}
