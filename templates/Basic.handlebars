@@ -92,7 +92,9 @@
       {font-size:10.0pt; font-family:"Rockwell",serif;} .MsoPapDefault
       {line-height:107%;} /* Page Definitions */ @page WordSection1
       {size:595.3pt 841.9pt; margin:43.2pt 43.2pt 115.2pt 43.2pt;}
-      div.WordSection1 {page:WordSection1;} -->
+      div.WordSection1 {page:WordSection1;} --> .experience-block,
+      .education-block, .custom-block { page-break-inside: avoid; break-inside:
+      avoid;}
     </style>
   </head>
 
@@ -218,8 +220,8 @@
                 <h3>Experience</h3>
               </div>
               {{#each experience}}
+              <div class=".experience-block">
                 <h4>
-
                   {{title}}
                   {{#if company}}
                     <span style="font-size: 10px;">●</span>
@@ -227,10 +229,13 @@
                   {{#if duration}}
                     <span style="font-size: 10px;">●</span>
                     {{duration}}{{/if}}
-
                 </h4>
                 {{#each responsibilities}}
-                  <p class="MsoNormal" style="line-height: 1.6;">{{this}}</p>
+                  <p
+                    class="MsoNormal experience-block"
+                    style="line-height: 1.6;"
+                  >{{this}}</p>
+              </div>
                 {{/each}}
               {{/each}}
             {{/if}}
@@ -243,6 +248,7 @@
                 <h3>Education</h3>
               </div>
               {{#each education}}
+              <div class="education-block">
                 <h4>
 
                   {{degree}}
@@ -254,7 +260,8 @@
                     {{institution}}{{/if}}
 
                 </h4>
-                <p class="MsoNormal">{{score}}</p>
+                <p class="MsoNormal education-block">{{score}}</p>
+              </div>
               {{/each}}
             {{/if}}
 
@@ -266,20 +273,23 @@
                 >
                   <h3>{{title}}</h3>
                 </div>
+                <div class="custom-block">
+                  
                 {{#each items}}
-                  <h4>
 
-                    {{title}}
-                    {{#if date}}
-                      <span style="font-size: 10px;">●</span>
-                      {{date}}{{/if}}
-                    {{#if location}}
-                      <span style="font-size: 10px;">●</span>
-                      {{location}}{{/if}}
+                  {{#if (orNotEmpty title date location)}}
+                    <h4>
+                      {{#if title}}{{title}}{{/if}}
+                      {{#if date}}<span style="font-size: 10px;">●</span>
+                        {{date}}{{/if}}
+                      {{#if location}}<span style="font-size: 10px;">●</span>
+                        {{location}}{{/if}}
+                    </h4>
+                  {{/if}}
 
-                  </h4>
-                  <p class="MsoNormal">{{description}}</p>
+                  <p class="MsoNormal custom-block">{{description}}</p>
                 {{/each}}
+                </div>
               {{/each}}
             {{/if}}
           </td>

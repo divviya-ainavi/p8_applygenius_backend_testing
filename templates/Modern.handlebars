@@ -49,7 +49,12 @@
       Definitions */ @page WordSection1 {size:595.3pt 841.9pt; margin:36.0pt
       36.0pt 36.0pt 36.0pt; line-height: 1.6;} div.WordSection1
       {page:WordSection1;} /* List Definitions */ ol {margin-bottom:0cm;} ul
-      {margin-bottom:0cm;} -->
+      {margin-bottom:0cm;} --> .section-block { page-break-inside: avoid;
+      break-inside: avoid; page-break-before: auto; page-break-after: auto; }
+      .bullet-line { page-break-inside: avoid; break-inside: avoid; }
+      .experience-block, .education-block, .custom-block { page-break-inside:
+      avoid; break-inside: avoid; margin-bottom: 10px; }
+
     </style>
   </head>
   <body>
@@ -108,7 +113,7 @@
                 <p style="margin-top: 8px;"></p>
                 <h1>Education</h1>
                 {{#each education}}
-                  <div>
+                  <div class="education-block">
                     <p class="TextLeft">{{institution}}</p>
                     <p class="TextLeft">{{degree}}</p>
                     <p class="TextLeft">{{year}}</p>
@@ -160,14 +165,20 @@
               <td colspan="3" style="padding: 10px; vertical-align: top;">
                 {{#each customsections}}
                   <div
+                    class="custom-block"
                     style="border-bottom: 1pt solid #648276; margin-bottom: 10px;"
                   >
+
                     <h2 style="line-height: 1.6;">{{title}}</h2>
                     {{#each items}}
-                      <p class="TextRight"><b>{{title}}</b>{{#if location}}
-                          |
-                          {{location}}{{/if}}</p>
-                      <p class="TextRight">{{date}}</p>
+                      {{#if (orNotEmpty title location date)}}
+                        <p class="TextRight">
+                          {{#if title}}<b>{{title}}</b>{{/if}}
+                          {{#if location}} | {{location}}{{/if}}
+                        </p>
+                        {{#if date}}<p class="TextRight">{{date}}</p>{{/if}}
+                      {{/if}}
+
                       <p
                         class="MsoNormal"
                         style="line-height: 1.6;"

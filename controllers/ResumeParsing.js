@@ -153,7 +153,7 @@ exports.parseResume = async (req, res) => {
                     role: 'user',
                     content: `Extract the following fields from the resume text:
     
-    firstName, lastName, email, phoneNumber, linkedinProfile, location (with address, city, country, postcode), blog, portfolio, currentPosition, summary, skills (array), education (with degree, institution, from, to, city, region, description), certifications (with title, from, to, institution, description), projects (array with title, year, description), achievements (array), communication, leadership, references, awardsandAcknowledgements (array), interests (array)
+    firstName, lastName, email, phoneNumber, linkedinProfile, location (with address, city, country, postcode), blog, portfolio, currentPosition, summary, skills (array), education (with degree, institution, from, to, city, region, description), certifications (with title, from, to, institution, description), projects (array with title, year, description), achievements (array of quantifiable accomplishments),communication, leadership, references, awardsandAcknowledgements (array), interests (array)
     
     Return ONLY valid JSON in this format (exclude experience):
     
@@ -200,7 +200,10 @@ exports.parseResume = async (req, res) => {
       "references": "",
       "awardsandAcknowledgements": [],
       "interests": [],
-      "achivements":[]
+      "achievements": [
+    "",
+    ""
+  ]
     }
     
     Resume Text:
