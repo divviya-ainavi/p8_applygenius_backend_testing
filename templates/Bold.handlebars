@@ -99,7 +99,8 @@
           <div class="experience-block">
             <p class="MsoNormal" style="font-weight: bold;">{{company}}</p>
             <p class="MsoNormal">
-              {{title}}
+              <span style="font-weight: bold;"> {{title}}</span>
+
               {{#if title}} | {{/if}}
               {{duration}}
             </p>
@@ -168,7 +169,7 @@
                     style="font-family: Wingdings; color: #e3ab47; font-size: 10px; margin-right: 2px;"
                   >●</span>
                   <strong>{{title}}</strong>
-                  {{#if location}} <strong>{{location}} |</strong>{{/if}}
+                  {{#if location}} <strong>{{location}} </strong>{{/if}}
                   {{#if date}} | {{date}}{{/if}}
 
                 </p>
