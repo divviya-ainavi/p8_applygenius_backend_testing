@@ -142,7 +142,7 @@ function extractJSON(text) {
 exports.parseResume = async (req, res) => {
   const { resume: resumeText, appliedJobTitle } = req.body;
   if (!resumeText) return res.status(400).json({ error: 'Resume text is required' });
-
+  // console.log(process.env.OPENAI_API_KEY, "open api key")
   try {
     const generalPrompt = {
       model: 'gpt-3.5-turbo',
@@ -155,7 +155,8 @@ exports.parseResume = async (req, res) => {
     
     firstName, lastName, email, phoneNumber, linkedinProfile, location (with address, city, country, postcode), blog, portfolio, currentPosition, summary, skills (array), education (with degree, institution, from, to, city, region, description), certifications (with title, from, to, institution, description), projects (array with title, year, description), achievements (array of quantifiable accomplishments),communication, leadership, references, awardsandAcknowledgements (array), interests (array)
     
-    Return ONLY valid JSON in this format (exclude experience):
+    Do NOT wrap the output in markdown, triple backticks, or any code block. Return ONLY raw valid JSON. (exclude experience):
+    
     
     {
       "firstName": "",
@@ -213,9 +214,9 @@ exports.parseResume = async (req, res) => {
     };
 
     const experiencePrompt = {
-      model: 'gpt-4o',
+      model: 'gpt-4o-mini',
       temperature: 0,
-      max_tokens: 2000,
+      // max_tokens: 2000,
       messages: [
         {
           role: 'user',
@@ -260,8 +261,8 @@ exports.parseResume = async (req, res) => {
       axios.post('https://api.openai.com/v1/chat/completions', generalPrompt, headers),
       axios.post('https://api.openai.com/v1/chat/completions', experiencePrompt, headers)
     ]);
-    console.log(generalResponse.data.choices[0].message.content, "generalResponse.data.choices[0].message.content")
-    console.log(experienceResponse.data.choices[0].message.content, "experienceResponse.data.choices[0].message.content")
+    // console.log(generalResponse.data.choices[0].message.content, "generalResponse.data.choices[0].message.content")
+    // console.log(experienceResponse.data.choices[0].message.content, "experienceResponse.data.choices[0].message.content")
     const generalData = extractJSON(generalResponse.data.choices[0].message.content);
     const experienceData = extractJSON(experienceResponse.data.choices[0].message.content);
 
