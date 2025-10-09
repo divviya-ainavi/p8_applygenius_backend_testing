@@ -147,71 +147,68 @@ exports.parseResume = async (req, res) => {
     const generalPrompt = {
       model: 'gpt-3.5-turbo',
       temperature: 0,
-      // max_tokens: 800,
       messages: [
         {
           role: 'user',
-          content: `Extract the following fields from the resume text:
-    
-    firstName, lastName, email, phoneNumber, linkedinProfile, location (with address, city, country, postcode), blog, portfolio, currentPosition, summary, skills (array), education (with degree, institution, from, to, city, region, description), certifications (with title, from, to, institution, description), projects (array with title, year, description), achievements (array of quantifiable accomplishments),communication, leadership, references, awardsandAcknowledgements (array), interests (array)
-    
-    Do NOT wrap the output in markdown, triple backticks, or any code block. Return ONLY raw valid JSON. (exclude experience):
-    
-    
-    {
-      "firstName": "",
-      "lastName": "",
-      "email": "",
-      "phoneNumber": "",
-      "linkedinProfile": "",
-      "location": {
-        "address": "",
-        "city": "",
-        "country": "",
-        "postcode": ""
-      },
-      "blog": "",
-      "portfolio": "",
-      "currentPosition": "",
-      "summary": "",
-      "skills": [],
-      "education": [{
-        "degree": "",
-        "institution": "",
-        "from": "",
-        "to": "",
-        "city": "",
-        "region": "",
-        "description": ""
-      }],
-      "certifications": [{
-      title:"",
-      from:"",
-      to:"",
-      institution:"", 
-      description:""
-      }],
-      "projects": [{
-        "title": "",
-        "year": "",
-        "description": ""
-      }],
-      "communication": "",
-      "leadership": "",
-      "references": "",
-      "awardsandAcknowledgements": [],
-      "interests": [],
-      "achievements": [
-    "",
-    ""
+          content: `Extract structured information from the resume text and return ONLY valid raw JSON (no markdown, no code block).
+
+{
+  "firstName": "",
+  "lastName": "",
+  "email": "",
+  "phoneNumber": "",
+  "linkedinProfile": "",
+  "location": { "address": "", "city": "", "country": "", "postcode": "" },
+  "blog": "",
+  "portfolio": "",
+  "currentPosition": "",
+  "summary": "",
+  "skills": [],
+  "education": [{
+    "degree": "",
+    "institution": "",
+    "from": "",
+    "to": "",
+    "city": "",
+    "region": "",
+    "description": ""
+  }],
+  "certifications": [{
+    "title": "",
+    "from": "",
+    "to": "",
+    "institution": "",
+    "description": ""
+  }],
+  "projects": [{
+    "title": "",
+    "year": "",
+    "description": ""
+  }],
+  "communication": "",
+  "leadership": "",
+  "references": "",
+  "awardsandAcknowledgements": [],
+  "interests": [],
+  "achievements": [""],
+  "others": [{ "title": "", "content": "" }]
+}
+
+Rules:
+- Extract all clear quantifiable results or notable accomplishments into "achievements".
+- For "others", include every extra section or unique heading not matching the above fields.
+- Split multiple items into separate objects, e.g.:
+  "others": [
+    {"title": "Board Member", "content": "Served on International Advisory Board..."},
   ]
-    }
-    
-    Resume Text:
-    ${resumeText}`
+- Keep "title" short and "content" descriptive.
+- Leave fields empty if not found.
+
+Resume Text:
+${resumeText}`
         }
       ]
-    };
+    }
 
     const experiencePrompt = {
       model: 'gpt-4.1-mini',
