@@ -145,7 +145,7 @@ exports.parseResume = async (req, res) => {
   // console.log(process.env.OPENAI_API_KEY, "open api key")
   try {
     const generalPrompt = {
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4.1-mini',
       temperature: 0,
       // max_tokens: 800,
       messages: [
@@ -214,7 +214,7 @@ exports.parseResume = async (req, res) => {
     };
 
     const experiencePrompt = {
-      model: 'gpt-4o-mini',
+      model: 'gpt-4.1-mini',
       temperature: 0,
       // max_tokens: 2000,
       messages: [
