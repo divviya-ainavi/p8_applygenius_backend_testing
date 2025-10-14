@@ -116,7 +116,7 @@ const transformResumeData = (data) => {
   };
 };
 
-async function generatePdfBuffer(templateName, resumeData) {
+async function generatePdfBuffer(templateName, resumeData, pageLimit = null) {
   const templatePath = path.join(__dirname, "../templates", `${templateName}.handlebars`);
   const rawTemplate = await fs.readFile(templatePath, "utf-8");
   const compiled = hbs.handlebars.compile(rawTemplate);
@@ -132,11 +132,19 @@ async function generatePdfBuffer(templateName, resumeData) {
   const page = await browser.newPage();
   await page.setContent(filledHTML, { waitUntil: "networkidle0" });
 
-  const pdfBuffer = await page.pdf({
+  // Build PDF options
+  const pdfOptions = {
     format: "A4",
     printBackground: true,
     margin: { top: "7mm", bottom: "5mm", left: "5mm", right: "5mm" },
-  });
+  };
+
+  // Add page range limitation if pageLimit is specified
+  if (pageLimit && pageLimit > 0) {
+    pdfOptions.pageRanges = `1-${pageLimit}`;
+  }
+
+  const pdfBuffer = await page.pdf(pdfOptions);
 
   await page.close();
   await browser.close();
