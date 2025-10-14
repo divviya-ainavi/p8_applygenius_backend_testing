@@ -121,7 +121,7 @@ async function generatePdfBuffer(templateName, resumeData, pageLimit = null) {
   const rawTemplate = await fs.readFile(templatePath, "utf-8");
   const compiled = hbs.handlebars.compile(rawTemplate);
   const transformedData = transformResumeData(resumeData);
-  const filledHTML = compiled(transformedData);
+  let filledHTML = compiled(transformedData);
 
   const browser = await puppeteer.launch({
     headless: true,
@@ -130,7 +130,6 @@ async function generatePdfBuffer(templateName, resumeData, pageLimit = null) {
   });
 
   const page = await browser.newPage();
-  await page.setContent(filledHTML, { waitUntil: "networkidle0" });
 
   // Build PDF options
   const pdfOptions = {
@@ -139,9 +138,62 @@ async function generatePdfBuffer(templateName, resumeData, pageLimit = null) {
     margin: { top: "7mm", bottom: "5mm", left: "5mm", right: "5mm" },
   };
 
-  // Add page range limitation if pageLimit is specified
+  // If pageLimit is specified, we need to compress content to fit
   if (pageLimit && pageLimit > 0) {
-    pdfOptions.pageRanges = `1-${pageLimit}`;
+    // First, load content and measure actual page count
+    await page.setContent(filledHTML, { waitUntil: "networkidle0" });
+
+    // Calculate actual pages by measuring content height vs page height
+    const metrics = await page.evaluate(() => {
+      const bodyHeight = document.body.scrollHeight;
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      // A4 page height at 96 DPI minus margins (approximately 1070px usable height)
+      const a4HeightPx = 1123; // A4 height in pixels at standard web DPI
+      const marginsPx = 53; // Combined top/bottom margins (7mm + 5mm ≈ 53px)
+      const usableHeight = a4HeightPx - marginsPx;
+
+      return {
+        bodyHeight,
+        usableHeight,
+        estimatedPages: Math.ceil(bodyHeight / usableHeight)
+      };
+    });
+
+    const actualPageCount = metrics.estimatedPages;
+
+    // If actual pages exceed desired limit, apply compression
+    if (actualPageCount > pageLimit) {
+      // Calculate zoom factor to fit content within desired pages
+      const zoomFactor = Math.sqrt(pageLimit / actualPageCount) * 0.95; // 0.95 for safety margin
+
+      // Wrap content with zoom and scaling
+      filledHTML = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            * { box-sizing: border-box; }
+            body {
+              margin: 0;
+              padding: 0;
+              zoom: ${zoomFactor};
+              -moz-transform: scale(${zoomFactor});
+              -moz-transform-origin: 0 0;
+            }
+          </style>
+        </head>
+        <body>
+          ${filledHTML}
+        </body>
+        </html>
+      `;
+
+      // Reload page with compressed content
+      await page.setContent(filledHTML, { waitUntil: "networkidle0" });
+    }
+  } else {
+    // No page limit, just set content normally
+    await page.setContent(filledHTML, { waitUntil: "networkidle0" });
   }
 
   const pdfBuffer = await page.pdf(pdfOptions);
