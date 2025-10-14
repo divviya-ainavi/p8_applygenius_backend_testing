@@ -6,8 +6,11 @@ trigger:
     exclude:
       - '*'
 variables:
-  Devozy_DUMMY_VARIABLE: ID_OI27tTIE
+  Devozy_DUMMY_VARIABLE: ID_Lht8wUjC
   IMAGE_NAME: PLN1000004_MERN_Production
+  group: frontend-secrets
+  name: IMAGE_NAME
+  value: PLN1000014_MERN_Development
 pool:
   vmImage: ubuntu-latest
 steps:
