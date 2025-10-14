@@ -116,135 +116,12 @@ const transformResumeData = (data) => {
   };
 };
 
-// Function to generate CSS based on page limit
-const getPageLimitCSS = (pageLimit) => {
-  // Default (no limit or invalid value)
-  if (!pageLimit || ![1, 2, 3].includes(pageLimit)) {
-    return '';
-
-  }
-
-  const baseStyles = `
-    <style>
-      @page {
-        size: A4;
-        margin: 0;
-      }
-  `;
-
-  // 1-page resume: Very compact
-  if (pageLimit === 1) {
-    return baseStyles + `
-      body {
-        font-size: 9px !important;
-        line-height: 1.2 !important;
-        max-height: 297mm;
-        overflow: hidden;
-      }
-      h1, h2, h3, h4, h5, h6 {
-        margin: 3px 0 !important;
-        font-size: 11px !important;
-      }
-      p, li, div {
-        margin: 2px 0 !important;
-        padding: 1px 0 !important;
-        font-size: 9px !important;
-      }
-      section, .section {
-        margin-bottom: 6px !important;
-        padding: 4px 0 !important;
-      }
-      ul, ol {
-        margin: 2px 0 !important;
-        padding-left: 12px !important;
-      }
-      .experience-item, .education-item, .project-item {
-        margin-bottom: 4px !important;
-      }
-    </style>
-  `;
-  }
-
-  // 2-page resume: Moderately compact
-  if (pageLimit === 2) {
-    return baseStyles + `
-      body {
-        font-size: 10px !important;
-        line-height: 1.3 !important;
-        max-height: 594mm;
-        overflow: hidden;
-      }
-      h1, h2, h3, h4, h5, h6 {
-        margin: 4px 0 !important;
-        font-size: 12px !important;
-      }
-      p, li, div {
-        margin: 3px 0 !important;
-        padding: 2px 0 !important;
-        font-size: 10px !important;
-      }
-      section, .section {
-        margin-bottom: 8px !important;
-        padding: 5px 0 !important;
-      }
-      ul, ol {
-        margin: 3px 0 !important;
-        padding-left: 15px !important;
-      }
-      .experience-item, .education-item, .project-item {
-        margin-bottom: 6px !important;
-      }
-      @page:first {
-        page-break-after: always;
-      }
-    </style>
-  `;
-  }
-
-  // 3-page resume: Normal spacing
-  if (pageLimit === 3) {
-    return baseStyles + `
-      body {
-        font-size: 11px !important;
-        line-height: 1.4 !important;
-        max-height: 891mm;
-        overflow: hidden;
-      }
-      h1, h2, h3, h4, h5, h6 {
-        margin: 5px 0 !important;
-        font-size: 13px !important;
-      }
-      p, li, div {
-        margin: 4px 0 !important;
-        padding: 2px 0 !important;
-        font-size: 11px !important;
-      }
-      section, .section {
-        margin-bottom: 10px !important;
-        padding: 6px 0 !important;
-      }
-      ul, ol {
-        margin: 4px 0 !important;
-        padding-left: 18px !important;
-      }
-      .experience-item, .education-item, .project-item {
-        margin-bottom: 8px !important;
-      }
-    </style>
-  `;
-  }
-};
-
-async function generatePdfBuffer(templateName, resumeData, pageLimit = null) {
+async function generatePdfBuffer(templateName, resumeData) {
   const templatePath = path.join(__dirname, "../templates", `${templateName}.handlebars`);
   const rawTemplate = await fs.readFile(templatePath, "utf-8");
   const compiled = hbs.handlebars.compile(rawTemplate);
   const transformedData = transformResumeData(resumeData);
   const filledHTML = compiled(transformedData);
-
-  // Inject page limit CSS if specified
-  const pageLimitCSS = getPageLimitCSS(pageLimit);
-  const finalHTML = pageLimitCSS ? `${pageLimitCSS}\n${filledHTML}` : filledHTML;
 
   const browser = await puppeteer.launch({
     headless: true,
@@ -253,7 +130,7 @@ async function generatePdfBuffer(templateName, resumeData, pageLimit = null) {
   });
 
   const page = await browser.newPage();
-  await page.setContent(finalHTML, { waitUntil: "networkidle0" });
+  await page.setContent(filledHTML, { waitUntil: "networkidle0" });
 
   const pdfBuffer = await page.pdf({
     format: "A4",
@@ -364,8 +241,5 @@ module.exports = {
   generateHtmlPreview,
   generateDocxBuffer,
 };
-
-
-
 
 
