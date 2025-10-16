@@ -173,6 +173,14 @@ async function generatePdfBuffer(templateName, resumeData, pageLimit = null) {
       const originalStyles = styleMatch ? styleMatch[1] : '';
       const bodyContent = bodyMatch ? bodyMatch[1] : filledHTML;
 
+      // For 1-page limit, use minimal padding and margins
+      const containerPadding = pageLimit === 1 ? '0px' : '3px';
+
+      // Adjust PDF margins for single page
+      if (pageLimit === 1) {
+        pdfOptions.margin = { top: "3mm", bottom: "3mm", left: "3mm", right: "3mm" };
+      }
+
       // Wrap content with zoom and scaling, preserving original styles
       filledHTML = `
         <!DOCTYPE html>
@@ -182,6 +190,10 @@ async function generatePdfBuffer(templateName, resumeData, pageLimit = null) {
           <style>
             * { box-sizing: border-box; }
             ${originalStyles}
+            html {
+              margin: 0 !important;
+              padding: 0 !important;
+            }
             body {
               margin: 0 !important;
               padding: 0 !important;
@@ -190,7 +202,17 @@ async function generatePdfBuffer(templateName, resumeData, pageLimit = null) {
               -moz-transform-origin: 0 0;
             }
             .resume-container {
-              padding: 5px !important;
+              padding: ${containerPadding} !important;
+              margin: 0 !important;
+            }
+            hr {
+              margin: 2px 0 !important;
+            }
+            .section-title {
+              margin-bottom: 2px !important;
+            }
+            .experience-item, .education-item, .custom-section-block {
+              margin-bottom: 4px !important;
             }
           </style>
         </head>
