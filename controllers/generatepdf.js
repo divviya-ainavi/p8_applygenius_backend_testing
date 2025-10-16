@@ -166,24 +166,36 @@ async function generatePdfBuffer(templateName, resumeData, pageLimit = null) {
       // Calculate zoom factor to fit content within desired pages
       const zoomFactor = Math.sqrt(pageLimit / actualPageCount) * 0.95; // 0.95 for safety margin
 
-      // Wrap content with zoom and scaling
+      // Extract styles and body content from the original HTML
+      const styleMatch = filledHTML.match(/<style>([\s\S]*?)<\/style>/);
+      const bodyMatch = filledHTML.match(/<body>([\s\S]*?)<\/body>/);
+
+      const originalStyles = styleMatch ? styleMatch[1] : '';
+      const bodyContent = bodyMatch ? bodyMatch[1] : filledHTML;
+
+      // Wrap content with zoom and scaling, preserving original styles
       filledHTML = `
         <!DOCTYPE html>
         <html>
         <head>
+          <meta charset="UTF-8" />
           <style>
             * { box-sizing: border-box; }
+            ${originalStyles}
             body {
-              margin: 0;
-              padding: 0;
+              margin: 0 !important;
+              padding: 0 !important;
               zoom: ${zoomFactor};
               -moz-transform: scale(${zoomFactor});
               -moz-transform-origin: 0 0;
             }
+            .resume-container {
+              padding: 5px !important;
+            }
           </style>
         </head>
         <body>
-          ${filledHTML}
+          ${bodyContent}
         </body>
         </html>
       `;
