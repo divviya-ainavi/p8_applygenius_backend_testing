@@ -175,6 +175,7 @@ async function generatePdfBuffer(templateName, resumeData, pageLimit = null) {
 
       // For 1-page limit, use minimal padding and margins
       const containerPadding = pageLimit === 1 ? '0px' : '3px';
+      const containerMaxWidth = pageLimit === 1 ? '100%' : '800px';
 
       // Adjust PDF margins for single page
       if (pageLimit === 1) {
@@ -193,17 +194,21 @@ async function generatePdfBuffer(templateName, resumeData, pageLimit = null) {
             html {
               margin: 0 !important;
               padding: 0 !important;
+              width: 100%;
             }
             body {
               margin: 0 !important;
               padding: 0 !important;
+              width: 100%;
               zoom: ${zoomFactor};
               -moz-transform: scale(${zoomFactor});
               -moz-transform-origin: 0 0;
             }
             .resume-container {
               padding: ${containerPadding} !important;
-              margin: 0 !important;
+              margin: 0 auto !important;
+              max-width: ${containerMaxWidth} !important;
+              width: 100% !important;
             }
             hr {
               margin: 2px 0 !important;
