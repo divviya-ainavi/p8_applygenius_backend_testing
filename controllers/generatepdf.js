@@ -4,6 +4,8 @@ const path = require("path");
 const fs = require("fs/promises");
 const moment = require("moment");
 const htmlToDocx = require("html-to-docx");
+const Docxtemplater = require("docxtemplater");
+const PizZip = require("pizzip");
 
 
 // Setup Handlebars
@@ -302,6 +304,7 @@ async function generateHtmlPreview(templateName, resumeData) {
   return fullHTML;
 }
 
+// OLD FUNCTION: Generate DOCX from HTML (using html-to-docx)
 async function generateDocxBuffer(templateName, resumeData) {
   const templatePath = path.join(__dirname, "../templates", `${templateName}.handlebars`);
   const rawTemplate = await fs.readFile(templatePath, "utf-8");
@@ -335,10 +338,225 @@ async function generateDocxBuffer(templateName, resumeData) {
   return docxBuffer;
 }
 
+// Transform resume data for DOCX templates
+const transformResumeDataForDocx = (data) => {
+  const location = `${data.location?.city || ""} ${data.location?.city && data.location?.country ? "," : ""} ${data.location?.country || ""}`.trim();
+  console.log(data.experience, "key achievements")
+  return {
+    firstName: data.firstName || "",
+    lastName: data.lastName || "",
+    location: location,
+    email: data.email || "",
+    phoneNumber: data.phoneNumber || "",
+    linkedin: data.linkedinProfile || "",
+    appliedJobTitle: data.appliedJobTitle || "",
+    summary: data.summary || "",
+
+    experience: data.experience?.map((exp) => ({
+      position: exp.position || "",
+      companyName: exp.companyName || "",
+      from: formatDateExp(exp.from, exp.to) || "",
+      to: formatDateExp(exp.to) || "Present",
+      keyAchievements: Array.isArray(exp.keyAchievements)
+        ? exp.keyAchievements.filter(achievement => achievement && achievement.trim && achievement.trim() !== "")
+        : [],
+    })) || [],
+
+    education: data.education?.map((ed) => ({
+      degree: ed.degree || "",
+      institution: ed.institution || "",
+      from: formatDateExp(ed.from, ed.to, "education") || "",
+      to: formatDateExp(ed.to, "", "education") || "",
+      description: ed.description || "",
+    })) || [],
+
+    skills: data.skills?.map((s) => ({
+      name: typeof s === 'string' ? s : (s.name || "")
+    })) || [],
+
+    customSections: data.customSections?.map((section) => ({
+      title: section.title || "",
+      items: section.items?.map((item) => ({
+        name: item.name || "",
+        location: item.location || "",
+        startDate: formatDateExp(item.startDate, item.endDate) || "",
+        endDate: formatDateExp(item.endDate) || "",
+        description: item.description || "",
+      })) || [],
+    })) || [],
+  };
+};
+
+// Compress DOCX content by modifying font sizes, spacing, and margins
+function compressDocxContent(zip, pageLimit) {
+  // Compression factors based on page limit
+  let fontSizeMultiplier, spacingMultiplier, marginReduction;
+
+  if (pageLimit === 1) {
+    fontSizeMultiplier = 0.65;  // 65% of original font size
+    spacingMultiplier = 0.50;   // 50% of original spacing
+    marginReduction = 0.40;     // 40% of original margins
+  } else if (pageLimit === 2) {
+    fontSizeMultiplier = 0.80;  // 80% of original font size
+    spacingMultiplier = 0.70;   // 70% of original spacing
+    marginReduction = 0.65;     // 65% of original margins
+  } else if (pageLimit === 3) {
+    fontSizeMultiplier = 0.90;  // 90% of original font size
+    spacingMultiplier = 0.80;   // 80% of original spacing
+    marginReduction = 0.80;     // 80% of original margins
+  } else {
+    return; // No compression needed
+  }
+
+  try {
+    // Modify document.xml (main content)
+    const documentXml = zip.file('word/document.xml').asText();
+    let modifiedDocXml = documentXml;
+
+    // Reduce font sizes - <w:sz w:val="XX"/> and <w:szCs w:val="XX"/>
+    modifiedDocXml = modifiedDocXml.replace(/<w:sz w:val="(\d+)"\/>/g, (match, size) => {
+      const newSize = Math.max(14, Math.round(parseInt(size) * fontSizeMultiplier)); // Minimum 7pt (14 half-points)
+      return `<w:sz w:val="${newSize}"/>`;
+    });
+
+    modifiedDocXml = modifiedDocXml.replace(/<w:szCs w:val="(\d+)"\/>/g, (match, size) => {
+      const newSize = Math.max(14, Math.round(parseInt(size) * fontSizeMultiplier));
+      return `<w:szCs w:val="${newSize}"/>`;
+    });
+
+    // Reduce spacing before and after paragraphs
+    modifiedDocXml = modifiedDocXml.replace(/<w:spacing([^>]*?)w:before="(\d+)"([^>]*?)>/g, (match, before, spacing, after) => {
+      const newSpacing = Math.round(parseInt(spacing) * spacingMultiplier);
+      return `<w:spacing${before}w:before="${newSpacing}"${after}>`;
+    });
+
+    modifiedDocXml = modifiedDocXml.replace(/<w:spacing([^>]*?)w:after="(\d+)"([^>]*?)>/g, (match, before, spacing, after) => {
+      const newSpacing = Math.round(parseInt(spacing) * spacingMultiplier);
+      return `<w:spacing${before}w:after="${newSpacing}"${after}>`;
+    });
+
+    // Reduce line spacing
+    modifiedDocXml = modifiedDocXml.replace(/<w:spacing([^>]*?)w:line="(\d+)"([^>]*?)>/g, (match, before, spacing, after) => {
+      const newSpacing = Math.round(parseInt(spacing) * spacingMultiplier);
+      return `<w:spacing${before}w:line="${newSpacing}"${after}>`;
+    });
+
+    // Reduce page margins - handle multiple w:pgMar patterns
+    modifiedDocXml = modifiedDocXml.replace(
+      /<w:pgMar([^>]*?)\/>/g,
+      (match, attributes) => {
+        let newAttributes = attributes;
+
+        // Replace each margin attribute
+        newAttributes = newAttributes.replace(/w:top="(\d+)"/g, (m, val) => {
+          return `w:top="${Math.round(parseInt(val) * marginReduction)}"`;
+        });
+        newAttributes = newAttributes.replace(/w:right="(\d+)"/g, (m, val) => {
+          return `w:right="${Math.round(parseInt(val) * marginReduction)}"`;
+        });
+        newAttributes = newAttributes.replace(/w:bottom="(\d+)"/g, (m, val) => {
+          return `w:bottom="${Math.round(parseInt(val) * marginReduction)}"`;
+        });
+        newAttributes = newAttributes.replace(/w:left="(\d+)"/g, (m, val) => {
+          return `w:left="${Math.round(parseInt(val) * marginReduction)}"`;
+        });
+
+        return `<w:pgMar${newAttributes}/>`;
+      }
+    );
+
+    // Update the document.xml in the zip using PizZip's file() method
+    zip.file('word/document.xml', modifiedDocXml);
+
+    // Modify styles.xml to reduce default styles
+    const stylesFile = zip.file('word/styles.xml');
+    if (stylesFile) {
+      const stylesXml = stylesFile.asText();
+      let modifiedStylesXml = stylesXml;
+
+      // Reduce font sizes in styles
+      modifiedStylesXml = modifiedStylesXml.replace(/<w:sz w:val="(\d+)"\/>/g, (match, size) => {
+        const newSize = Math.max(14, Math.round(parseInt(size) * fontSizeMultiplier));
+        return `<w:sz w:val="${newSize}"/>`;
+      });
+
+      modifiedStylesXml = modifiedStylesXml.replace(/<w:szCs w:val="(\d+)"\/>/g, (match, size) => {
+        const newSize = Math.max(14, Math.round(parseInt(size) * fontSizeMultiplier));
+        return `<w:szCs w:val="${newSize}"/>`;
+      });
+
+      // Reduce spacing in styles
+      modifiedStylesXml = modifiedStylesXml.replace(/<w:spacing([^>]*?)w:before="(\d+)"([^>]*?)>/g, (match, before, spacing, after) => {
+        const newSpacing = Math.round(parseInt(spacing) * spacingMultiplier);
+        return `<w:spacing${before}w:before="${newSpacing}"${after}>`;
+      });
+
+      modifiedStylesXml = modifiedStylesXml.replace(/<w:spacing([^>]*?)w:after="(\d+)"([^>]*?)>/g, (match, before, spacing, after) => {
+        const newSpacing = Math.round(parseInt(spacing) * spacingMultiplier);
+        return `<w:spacing${before}w:after="${newSpacing}"${after}>`;
+      });
+
+      modifiedStylesXml = modifiedStylesXml.replace(/<w:spacing([^>]*?)w:line="(\d+)"([^>]*?)>/g, (match, before, spacing, after) => {
+        const newSpacing = Math.round(parseInt(spacing) * spacingMultiplier);
+        return `<w:spacing${before}w:line="${newSpacing}"${after}>`;
+      });
+
+      // Update the styles.xml in the zip
+      zip.file('word/styles.xml', modifiedStylesXml);
+    }
+
+    console.log(`DOCX compressed for page limit: ${pageLimit}`);
+  } catch (error) {
+    console.error('Error compressing DOCX content:', error);
+    throw error;
+  }
+}
+
+// NEW FUNCTION: Generate DOCX from .docx template (using docxtemplater)
+async function generateDocxFromTemplate(templateName, resumeData, pageLimit = null) {
+  // Use .docx template file
+  const templatePath = path.join(__dirname, "../templates", `${templateName}.docx`);
+
+  // Read the template file as binary
+  const content = await fs.readFile(templatePath, 'binary');
+
+  // Load the docx file as binary content
+  const zip = new PizZip(content);
+
+  // Create a docxtemplater instance
+  const doc = new Docxtemplater(zip, {
+    paragraphLoop: true,
+    linebreaks: true,
+  });
+
+  // Transform the data for DOCX template
+  const transformedData = transformResumeDataForDocx(resumeData);
+  console.log(transformedData?.experience, "transformed data for docx")
+  // Set the template data
+  doc.render(transformedData);
+
+  // Get the zip after rendering
+  const generatedZip = doc.getZip();
+
+  // Apply compression if pageLimit is specified
+  if (pageLimit && pageLimit > 0 && pageLimit <= 3) {
+    compressDocxContent(generatedZip, pageLimit);
+  }
+
+  // Generate the docx buffer
+  const buffer = generatedZip.generate({
+    type: 'nodebuffer',
+    compression: "DEFLATE",
+  });
+
+  return buffer;
+}
+
 module.exports = {
   generatePdfBuffer,
   generateHtmlPreview,
   generateDocxBuffer,
+  generateDocxFromTemplate,
 };
 
 

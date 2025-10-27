@@ -18,35 +18,37 @@
       take too much space */ .contact-info > * { flex-shrink: 1; /* Prevents
       elements from stretching too much */ min-width: auto; max-width: 100%; /*
       Ensures the items stay within bounds */ text-align: center; } hr { border:
-      1px solid #555; margin: 3px 0; } .section-title { margin-bottom: 3px; font-size: 11.5px;
-      font-weight: bold; color: #000; } .info { font-size: 9.5px; color: #000; }
-      .experience-item, .skills-list { margin-bottom: 8px; } .experience-item
-      h4 { margin: 3px 0; display: flex; justify-content: space-between; font-size: 9.5px; }
-      .experience-dates { font-weight: bold; font-size: 9.5px; } .skills-container { display:
-      flex; flex-wrap: wrap; justify-content: space-between; padding: 5px 0; }
-      .skills-column { text-align: left; padding: 3px 0; } .bullet-list {
-      list-style: none; /* Remove default bullets */ padding-left: 0px; /*
-      Maintain indentation */ margin: 0; } .bullet-list li { position: relative;
-      padding-left: 15px; /* Space for the custom bullet */ margin-bottom: 2px;
-      /* Space between bullet points */ font-size: 9.5px; } .bullet-list li::before { content:
-      "●"; /* Unicode bullet symbol */ color: black; /* Change this to your
-      desired bullet color */ font-size: 8px; /* Adjust bullet size */
-      position: absolute; left: 0; top: 5; } .education-item { display: flex;
-      flex-direction: column; /* Stack items vertically */ margin-bottom: 5px; } .education-details
-      { display: flex; justify-content: space-between; /* Degree on the left,
-      Date on the right */ align-items: center; } .education-details p { font-size: 9.5px; } .education-dates {
-      white-space: nowrap; /* Prevent wrapping */ text-align: right; /* Align
-      text to the right */ min-width: 120px; /* Ensures consistent width */
-      color: #555; /* Subtle color */ font-size: 9.5px; } /* Page break handling for Puppeteer */
-      .experience-item, .education-item, .skills-column, .custom-block {
+      1px solid #555; margin: 3px 0; } .section-title { margin-bottom: 3px;
+      font-size: 11.5px; font-weight: bold; color: #000; } .info { font-size:
+      9.5px; color: #000; } .experience-item, .skills-list { margin-bottom: 8px;
+      } .experience-item h4 { margin: 3px 0; display: flex; justify-content:
+      space-between; font-size: 9.5px; } .experience-dates { font-weight: bold;
+      font-size: 9.5px; } .skills-container { display: flex; flex-wrap: wrap;
+      justify-content: space-between; padding: 5px 0; } .skills-column {
+      text-align: left; padding: 3px 0; } .bullet-list { list-style: none; /*
+      Remove default bullets */ padding-left: 0px; /* Maintain indentation */
+      margin: 0; } .bullet-list li { position: relative; padding-left: 15px; /*
+      Space for the custom bullet */ margin-bottom: 2px; /* Space between bullet
+      points */ font-size: 9.5px; } .bullet-list li::before { content: "●"; /*
+      Unicode bullet symbol */ color: black; /* Change this to your desired
+      bullet color */ font-size: 5px; /* Adjust bullet size */ position:
+      absolute; left: 0; top: 5; } .education-item { display: flex;
+      flex-direction: column; /* Stack items vertically */ margin-bottom: 5px; }
+      .education-details { display: flex; justify-content: space-between; /*
+      Degree on the left, Date on the right */ align-items: center; }
+      .education-details p { font-size: 9.5px; } .education-dates { white-space:
+      nowrap; /* Prevent wrapping */ text-align: right; /* Align text to the
+      right */ min-width: 120px; /* Ensures consistent width */ color: #555; /*
+      Subtle color */ font-size: 9.5px; } /* Page break handling for Puppeteer
+      */ .experience-item, .education-item, .skills-column, .custom-block {
       page-break-inside: avoid; break-inside: avoid; } .custom-section-block {
       margin-top: 5px; page-break-inside: avoid; } .custom-description-list {
       list-style: none; padding-left: 0; margin-top: 3px; }
       .custom-description-list li { position: relative; padding-left: 15px;
       margin-bottom: 2px; font-size: 9.5px; text-align: justify; }
       .custom-description-list li::before { content: "●"; color: black;
-      font-size: 8px; position: absolute; left: 0; top: 2px; } .bullet-list li
-      { page-break-inside: avoid; break-inside: avoid; } .skills-wrapper {
+      font-size: 8px; position: absolute; left: 0; top: 2px; } .bullet-list li {
+      page-break-inside: avoid; break-inside: avoid; } .skills-wrapper {
       page-break-inside: avoid; break-inside: avoid; } .summary-text {
       font-size: 9.5px; line-height: 1.4; margin: 0; color: #000; text-align:
       justify; /* ✅ improves alignment across lines */ }

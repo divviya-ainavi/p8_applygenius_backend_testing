@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const { generatePdfBuffer, generateHtmlPreview, generateDocxBuffer } = require("../controllers/generatepdf");
+const { generatePdfBuffer, generateHtmlPreview, generateDocxBuffer, generateDocxFromTemplate } = require("../controllers/generatepdf");
 
 const router = express.Router();
 
@@ -115,6 +115,35 @@ router.get("/preview-template", async (req, res) => {
     } catch (err) {
         console.error("HTML preview generation failed:", err);
         res.status(500).json({ error: "Failed to generate HTML preview" });
+    }
+});
+
+// NEW ENDPOINT: Download DOCX from .docx template
+router.post("/resume/download-docx-template", async (req, res) => {
+    const { ...resumeData } = req.body;
+
+    const data = resumeData?.resumeData;
+    const tempName = resumeData?.resumeData?.templatename || "Harvard";
+    const pageLimit = resumeData?.resumeData?.pageLimit; // Get page limit from request
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const safeFirst = data?.firstName?.replace(/\s+/g, "_") || "User";
+    const safeLast = data?.lastName?.replace(/\s+/g, "_") || "Resume";
+    const filename = `${safeFirst}_${safeLast}_Resume_${timestamp}.docx`;
+
+    try {
+        const docxBuffer = await generateDocxFromTemplate(tempName, data, pageLimit);
+
+        res.set({
+            "Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "Content-Disposition": `attachment; filename=${filename}`,
+            "Content-Length": docxBuffer.length,
+        });
+
+        return res.end(docxBuffer);
+    } catch (error) {
+        console.error("DOCX template generation error:", error);
+        return res.status(500).json({ error: "Failed to generate DOCX from template.", details: error.message });
     }
 });
 
