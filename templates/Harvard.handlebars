@@ -5,50 +5,52 @@
     <title>{{name}} Resume</title>
     <style>
       body { font-family: Arial, sans-serif; background-color: #fff; color:
-      #000; line-height: 1.2; } p { margin: 0px 100px 0px 0px; }
+      #000; line-height: 1.2; font-size: 9.5px; } p { margin: 0px 0px 0px 0px; }
       .resume-container { max-width: 800px; margin: auto; background: #fff;
-      padding: 20px; } .header { text-align: center; font-size: 20px;
-      font-weight: bold; color: #000; margin-bottom: 10px; } .contact-info {
+      padding: 10px; } .header { text-align: center; font-size: 20px;
+      font-weight: bold; color: #000; margin-bottom: 5px; } .contact-info {
       display: flex; flex-wrap: wrap; /* Allows wrapping only when needed */
-      align-items: center; justify-content: center; gap: 15px; font-size: 16px;
+      align-items: center; justify-content: center; gap: 10px; font-size: 9.5px;
       color: #000; text-align: center; } .contact-info a { color: #4da6ff;
       text-decoration: none; word-break: break-word; /* Ensures long text (like
       links) wraps */ } .contact-info a:hover { text-decoration: underline; }
-      .icon { font-size: 14px; margin-right: 5px; } /* Ensure each item doesn't
+      .icon { font-size: 9.5px; margin-right: 5px; } /* Ensure each item doesn't
       take too much space */ .contact-info > * { flex-shrink: 1; /* Prevents
       elements from stretching too much */ min-width: auto; max-width: 100%; /*
       Ensures the items stay within bounds */ text-align: center; } hr { border:
-      1px solid #555; } .section-title { margin-bottom: 10px; font-size: 18px;
-      font-weight: bold; color: #000; } .info { font-size: 16px; color: #000; }
-      .experience-item, .skills-list { margin-bottom: 20px; } .experience-item
-      h4 { margin: 5px 0; display: flex; justify-content: space-between; }
-      .experience-dates { font-weight: bold; } .skills-container { display:
-      flex; flex-wrap: wrap; justify-content: space-between; padding: 10px 0; }
-      .skills-column { text-align: left; padding: 5px 0; } .bullet-list {
-      list-style: none; /* Remove default bullets */ padding-left: 0px; /*
-      Maintain indentation */ } .bullet-list li { position: relative;
-      padding-left: 20px; /* Space for the custom bullet */ margin-bottom: 5px;
-      /* Space between bullet points */ } .bullet-list li::before { content:
-      "●"; /* Unicode bullet symbol */ color: black; /* Change this to your
-      desired bullet color */ font-size: 10px; /* Adjust bullet size */
-      position: absolute; left: 0; top: 5; } .education-item { display: flex;
-      flex-direction: column; /* Stack items vertically */ } .education-details
-      { display: flex; justify-content: space-between; /* Degree on the left,
-      Date on the right */ align-items: center; } .education-dates {
-      white-space: nowrap; /* Prevent wrapping */ text-align: right; /* Align
-      text to the right */ min-width: 120px; /* Ensures consistent width */
-      color: #555; /* Subtle color */ } /* Page break handling for Puppeteer */
-      .experience-item, .education-item, .skills-column, .custom-block {
+      1px solid #555; margin: 3px 0; } .section-title { margin-bottom: 3px;
+      font-size: 11.5px; font-weight: bold; color: #000; } .info { font-size:
+      9.5px; color: #000; } .experience-item, .skills-list { margin-bottom: 8px;
+      } .experience-item h4 { margin: 3px 0; display: flex; justify-content:
+      space-between; font-size: 9.5px; } .experience-dates { font-weight: bold;
+      font-size: 9.5px; } .skills-container { display: flex; flex-wrap: wrap;
+      justify-content: space-between; padding: 5px 0; } .skills-column {
+      text-align: left; padding: 3px 0; } .bullet-list { list-style: none; /*
+      Remove default bullets */ padding-left: 0px; /* Maintain indentation */
+      margin: 0; } .bullet-list li { position: relative; padding-left: 15px; /*
+      Space for the custom bullet */ margin-bottom: 2px; /* Space between bullet
+      points */ font-size: 9.5px; } .bullet-list li::before { content: "●"; /*
+      Unicode bullet symbol */ color: black; /* Change this to your desired
+      bullet color */ font-size: 5px; /* Adjust bullet size */ position:
+      absolute; left: 0; top: 5; } .education-item { display: flex;
+      flex-direction: column; /* Stack items vertically */ margin-bottom: 5px; }
+      .education-details { display: flex; justify-content: space-between; /*
+      Degree on the left, Date on the right */ align-items: center; }
+      .education-details p { font-size: 9.5px; } .education-dates { white-space:
+      nowrap; /* Prevent wrapping */ text-align: right; /* Align text to the
+      right */ min-width: 120px; /* Ensures consistent width */ color: #555; /*
+      Subtle color */ font-size: 9.5px; } /* Page break handling for Puppeteer
+      */ .experience-item, .education-item, .skills-column, .custom-block {
       page-break-inside: avoid; break-inside: avoid; } .custom-section-block {
-      margin-top: 10px; page-break-inside: avoid; } .custom-description-list {
-      list-style: none; padding-left: 0; margin-top: 5px; }
-      .custom-description-list li { position: relative; padding-left: 16px;
-      margin-bottom: 6px; font-size: 14px; text-align: justify; }
+      margin-top: 5px; page-break-inside: avoid; } .custom-description-list {
+      list-style: none; padding-left: 0; margin-top: 3px; }
+      .custom-description-list li { position: relative; padding-left: 15px;
+      margin-bottom: 2px; font-size: 9.5px; text-align: justify; }
       .custom-description-list li::before { content: "●"; color: black;
-      font-size: 10px; position: absolute; left: 0; top: 2px; } .bullet-list li
-      { page-break-inside: avoid; break-inside: avoid; } .skills-wrapper {
+      font-size: 8px; position: absolute; left: 0; top: 2px; } .bullet-list li {
+      page-break-inside: avoid; break-inside: avoid; } .skills-wrapper {
       page-break-inside: avoid; break-inside: avoid; } .summary-text {
-      font-size: 14px; line-height: 1.6; margin: 0; color: #000; text-align:
+      font-size: 9.5px; line-height: 1.4; margin: 0; color: #000; text-align:
       justify; /* ✅ improves alignment across lines */ }
 
     </style>
@@ -63,13 +65,11 @@
         {{#if jobTitle}}<strong>{{jobTitle}}</strong>{{/if}}
         {{#if linkedin}}<span>{{linkedin}}</span>{{/if}}
       </div>
-      <br />
 
       {{#if summary}}
         <h2 class="section-title">SUMMARY</h2>
         <hr />
         <p class="summary-text">{{summary}}</p>
-        <br />
       {{/if}}
 
       {{#if experience.length}}
@@ -93,7 +93,6 @@
               {{/if}}
             </div>
           {{/each}}
-          <br />
         </div>
       {{/if}}
 
@@ -110,7 +109,6 @@
               <p class="summary-text">{{score}}</p>
             </div>
           {{/each}}
-          <br />
         </div>
       {{/if}}
 
@@ -131,7 +129,6 @@
           {{! </div> }}
           {{! </div> }}
           <!-- ✅ close wrapper -->
-          <br />
         </div>
       {{/if}}
 
