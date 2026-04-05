@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { parseResume } = require('../controllers/ResumeParsing');
+const { parseResume, generateComparisonData } = require('../controllers/ResumeParsing');
 
 router.post('/parse-resume', parseResume);
+router.post('/resume/comparison', generateComparisonData);
 
 module.exports = router;
