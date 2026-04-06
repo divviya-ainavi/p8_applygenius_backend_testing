@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const { parseResume } = require('../controllers/ResumeParsing');
+const { parseResume, extractJobKeywords } = require('../controllers/ResumeParsing');
 
 router.post('/parse-resume', parseResume);
+router.post('/api/extract-job-keywords', extractJobKeywords);
 
 module.exports = router;
