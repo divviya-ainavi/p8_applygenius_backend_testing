@@ -4,6 +4,17 @@ const { generatePdfBuffer, generateHtmlPreview, generateDocxBuffer, generateDocx
 
 const router = express.Router();
 
+// Accepted template names (handlebars templates + HTML industry templates)
+const VALID_TEMPLATES = [
+  'Harvard', 'Basic', 'Bold', 'Modern',           // handlebars + docx
+  'Corporate', 'Startup', 'Technical', 'Executive', 'Academic', // HTML industry templates
+];
+
+const resolveTemplateName = (name) => {
+  if (!name || !VALID_TEMPLATES.includes(name)) return 'Harvard';
+  return name;
+};
+
 router.post("/resume/download-pdf", async (req, res) => {
 
     const { templatename, ...resumeData } = req.body;
@@ -23,7 +34,7 @@ router.post("/resume/download-pdf", async (req, res) => {
     const filename = `${safeFirst}_${safeLast}_Resume_${timestamp}.pdf`;
 
     try {
-        const pdfBuffer = await generatePdfBuffer(tempName || "Harvard", data, pageLimit);
+        const pdfBuffer = await generatePdfBuffer(resolveTemplateName(tempName), data, pageLimit);
 
         res.set({
             "Content-Type": "application/pdf",
@@ -42,7 +53,7 @@ router.post("/resume/download-docx", async (req, res) => {
     const { templatename, ...resumeData } = req.body;
 
     const data = resumeData?.resumeData;
-    const tempName = resumeData?.resumeData?.templatename || "Harvard";
+    const tempName = resolveTemplateName(resumeData?.resumeData?.templatename);
 
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const safeFirst = data?.firstName?.replace(/\s+/g, "_") || "User";
@@ -71,7 +82,7 @@ router.post("/resume/download", async (req, res) => {
     const format = resumeData?.resumeData?.format || "pdf";
     console.log(format, "format")
     const data = resumeData?.resumeData;
-    const templateName = data?.templatename || "Harvard";
+    const templateName = resolveTemplateName(data?.templatename);
     const pageLimit = data?.pageLimit;
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const safeFirst = data?.firstName?.replace(/\s+/g, "_") || "User";
@@ -123,7 +134,7 @@ router.post("/resume/download-docx-template", async (req, res) => {
     const { ...resumeData } = req.body;
 
     const data = resumeData?.resumeData;
-    const tempName = resumeData?.resumeData?.templatename || "Harvard";
+    const tempName = resolveTemplateName(resumeData?.resumeData?.templatename);
     const pageLimit = resumeData?.resumeData?.pageLimit; // Get page limit from request
 
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
