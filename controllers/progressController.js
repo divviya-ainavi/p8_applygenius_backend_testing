@@ -1,33 +1,33 @@
-/**
- * Progress Controller
- * Manages real-time SSE progress updates from n8n workflows to the frontend.
- * n8n HTTP nodes POST step data here; the frontend subscribes via SSE.
- */
-
-// In-memory store: jobId -> { steps, clients, cancelled }
+// In-memory store: jobId -> { state, clients }
 const jobs = new Map();
 
 function getOrCreateJob(jobId) {
   if (!jobs.has(jobId)) {
-    jobs.set(jobId, { steps: [], clients: [], cancelled: false, completed: false });
+    jobs.set(jobId, {
+      steps: [],
+      overallProgress: 0,
+      estimatedTimeRemaining: null,
+      isCancelled: false,
+      isComplete: false,
+      clients: [],
+    });
   }
   return jobs.get(jobId);
 }
 
-function broadcast(job, event, data) {
-  const payload = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
+function broadcast(job, eventName, data) {
+  const payload = `event: ${eventName}\ndata: ${JSON.stringify(data)}\n\n`;
   job.clients.forEach((res) => {
     try {
       res.write(payload);
-    } catch (_) {
-      // client disconnected
+    } catch {
+      // ignore broken connections
     }
   });
 }
 
 // GET /progress/:jobId/sse
-// Frontend subscribes here to receive real-time updates.
-const sseHandler = (req, res) => {
+const sseConnect = (req, res) => {
   const { jobId } = req.params;
 
   res.setHeader("Content-Type", "text/event-stream");
@@ -39,110 +39,138 @@ const sseHandler = (req, res) => {
   const job = getOrCreateJob(jobId);
   job.clients.push(res);
 
-  // Send any already-received steps so a reconnecting client catches up
+  // Send current state immediately on connect
   if (job.steps.length > 0) {
     job.steps.forEach((step) => {
-      res.write(`event: update\ndata: ${JSON.stringify(step)}\n\n`);
+      res.write(`event: step\ndata: ${JSON.stringify(step)}\n\n`);
     });
   }
 
-  if (job.completed) {
-    res.write(`event: complete\ndata: ${JSON.stringify({ percentage: 100 })}\n\n`);
+  if (job.isComplete) {
+    res.write(`event: complete\ndata: {}\n\n`);
   }
 
-  if (job.cancelled) {
-    res.write(`event: cancelled\ndata: ${JSON.stringify({ jobId })}\n\n`);
+  if (job.isCancelled) {
+    res.write(`event: cancelled\ndata: {}\n\n`);
   }
 
-  // Keep-alive ping every 20 seconds
-  const keepAlive = setInterval(() => {
+  // Heartbeat every 15s to keep connection alive
+  const heartbeat = setInterval(() => {
     try {
-      res.write(": ping\n\n");
-    } catch (_) {
-      clearInterval(keepAlive);
+      res.write(": heartbeat\n\n");
+    } catch {
+      clearInterval(heartbeat);
     }
-  }, 20000);
+  }, 15000);
 
   req.on("close", () => {
-    clearInterval(keepAlive);
-    job.clients = job.clients.filter((c) => c !== res);
+    clearInterval(heartbeat);
+    const idx = job.clients.indexOf(res);
+    if (idx >= 0) job.clients.splice(idx, 1);
   });
 };
 
 // POST /progress/:jobId/start
-// Called by n8n when the workflow begins.
-const startHandler = (req, res) => {
+const startJob = (req, res) => {
   const { jobId } = req.params;
   const job = getOrCreateJob(jobId);
   job.steps = [];
-  job.completed = false;
-  job.cancelled = false;
+  job.overallProgress = 0;
+  job.isCancelled = false;
+  job.isComplete = false;
 
-  const data = { jobId, started: true, ...req.body };
-  broadcast(job, "start", data);
+  const stepData = req.body || {};
+  if (stepData.name) {
+    const step = {
+      name: stepData.name,
+      description: stepData.description || "",
+      percentage: stepData.percentage ?? 0,
+      estimatedSecondsRemaining: stepData.estimatedSecondsRemaining ?? null,
+      status: "active",
+    };
+    job.steps.push(step);
+    job.overallProgress = step.percentage;
+    job.estimatedTimeRemaining = step.estimatedSecondsRemaining;
+    broadcast(job, "step", step);
+  }
+
   res.json({ ok: true });
 };
 
 // POST /progress/:jobId/update
-// Called by n8n Progress Update HTTP nodes with step metadata.
-const updateHandler = (req, res) => {
+const updateJob = (req, res) => {
   const { jobId } = req.params;
   const job = getOrCreateJob(jobId);
 
-  if (job.cancelled) {
+  if (job.isCancelled) {
     return res.status(409).json({ ok: false, reason: "cancelled" });
   }
 
-  const { name, description, percentage, estimatedSecondsRemaining, status } = req.body;
+  const stepData = req.body || {};
   const step = {
-    name: name || "Processing",
-    description: description || "",
-    percentage: typeof percentage === "number" ? percentage : 0,
-    estimatedSecondsRemaining: typeof estimatedSecondsRemaining === "number" ? estimatedSecondsRemaining : null,
-    status: status || "in_progress",
+    name: stepData.name || "Processing",
+    description: stepData.description || "",
+    percentage: stepData.percentage ?? job.overallProgress,
+    estimatedSecondsRemaining: stepData.estimatedSecondsRemaining ?? null,
+    status: "active",
   };
 
-  // Upsert step by name
-  const idx = job.steps.findIndex((s) => s.name === step.name);
-  if (idx >= 0) {
-    job.steps[idx] = step;
-  } else {
-    job.steps.push(step);
-  }
+  // Mark previous active step as complete
+  job.steps.forEach((s) => {
+    if (s.status === "active") s.status = "complete";
+  });
 
-  broadcast(job, "update", step);
+  job.steps.push(step);
+  job.overallProgress = step.percentage;
+  job.estimatedTimeRemaining = step.estimatedSecondsRemaining;
+
+  broadcast(job, "step", step);
   res.json({ ok: true });
 };
 
 // POST /progress/:jobId/complete
-// Called by n8n when the workflow finishes successfully.
-const completeHandler = (req, res) => {
+const completeJob = (req, res) => {
   const { jobId } = req.params;
   const job = getOrCreateJob(jobId);
-  job.completed = true;
 
-  const data = { jobId, percentage: 100, ...req.body };
-  broadcast(job, "complete", data);
+  job.steps.forEach((s) => {
+    if (s.status === "active") s.status = "complete";
+  });
+  job.overallProgress = 100;
+  job.isComplete = true;
 
-  // Clean up after a delay so reconnecting clients can still read state
-  setTimeout(() => jobs.delete(jobId), 60000);
+  broadcast(job, "complete", { percentage: 100 });
+
+  // Clean up after a short delay
+  setTimeout(() => jobs.delete(jobId), 30000);
+
   res.json({ ok: true });
 };
 
 // DELETE /progress/:jobId
-// Called by frontend cancel button; signals n8n to stop.
-const cancelHandler = (req, res) => {
+const cancelJob = (req, res) => {
   const { jobId } = req.params;
   if (!jobs.has(jobId)) {
     return res.status(404).json({ ok: false, reason: "not found" });
   }
 
   const job = jobs.get(jobId);
-  job.cancelled = true;
+  job.isCancelled = true;
 
-  broadcast(job, "cancelled", { jobId });
-  setTimeout(() => jobs.delete(jobId), 30000);
+  broadcast(job, "cancelled", {});
+
+  // Close all SSE clients
+  job.clients.forEach((clientRes) => {
+    try {
+      clientRes.end();
+    } catch {
+      // ignore
+    }
+  });
+  job.clients = [];
+
+  jobs.delete(jobId);
   res.json({ ok: true });
 };
 
-module.exports = { sseHandler, startHandler, updateHandler, completeHandler, cancelHandler };
+module.exports = { sseConnect, startJob, updateJob, completeJob, cancelJob };
