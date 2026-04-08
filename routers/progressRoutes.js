@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { subscribe, start, update, complete, cancel } = require("../controllers/progressController");
+const { startJob, updateJob, completeJob, cancelJob, sseStream } = require("../controllers/progressController");
 
-router.get("/:jobId/sse", subscribe);
-router.post("/:jobId/start", start);
-router.post("/:jobId/update", update);
-router.post("/:jobId/complete", complete);
-router.delete("/:jobId", cancel);
+router.get("/:jobId/sse", sseStream);
+router.post("/:jobId/start", startJob);
+router.post("/:jobId/update", updateJob);
+router.post("/:jobId/complete", completeJob);
+router.delete("/:jobId", cancelJob);
 
 module.exports = router;
