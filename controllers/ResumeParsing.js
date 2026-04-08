@@ -122,38 +122,34 @@ ${resumeText}`
       ]
     };
 
-    const headers = {
-      headers: {
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        'Content-Type': 'application/json'
-      }
-    };
-
-    const skillsPrompt = {
+    const skillsProfilePrompt = {
       model: 'gpt-4.1-mini',
       temperature: 0,
       messages: [
         {
           role: 'user',
-          content: `Extract a structured skills profile from the resume below. For each skill, infer:
-- skill name
-- proficiency level (Beginner | Intermediate | Advanced | Expert) based on context
-- company name where the skill was used (if identifiable)
-- job title / role where the skill was used (if identifiable)
-- approximate duration of usage (e.g. "2 years", "6 months")
+          content: `Extract a structured skills profile from the resume. For each skill, infer the proficiency level from how it was used and include context.
 
-Return ONLY valid raw JSON (no markdown):
+Return ONLY valid raw JSON (no markdown, no code block):
+
 {
   "skills_profile": [
     {
-      "skill": "Python",
-      "proficiency": "Advanced",
-      "company": "Acme Corp",
-      "role": "Data Engineer",
-      "duration": "3 years"
+      "name": "skill name",
+      "proficiency": "Beginner|Intermediate|Advanced|Expert",
+      "company": "company name where skill was used (most recent)",
+      "role": "job title where skill was used",
+      "duration": "approximate duration e.g. 2 years",
+      "source": "extracted"
     }
   ]
 }
+
+Rules:
+- Include all technical and soft skills evident from the resume.
+- Infer proficiency from context (e.g. "led", "architected" = Expert; "assisted" = Beginner).
+- If a skill appears in multiple jobs, use the most recent company/role.
+- Leave company/role/duration empty strings if not determinable.
 
 Resume Text:
 ${resumeText}`
@@ -161,22 +157,29 @@ ${resumeText}`
       ]
     };
 
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    };
+
     // 🔁 Run all three requests in parallel
-    const [generalResponse, experienceResponse, skillsResponse] = await Promise.all([
+    const [generalResponse, experienceResponse, skillsProfileResponse] = await Promise.all([
       axios.post('https://api.openai.com/v1/chat/completions', generalPrompt, headers),
       axios.post('https://api.openai.com/v1/chat/completions', experiencePrompt, headers),
-      axios.post('https://api.openai.com/v1/chat/completions', skillsPrompt, headers)
+      axios.post('https://api.openai.com/v1/chat/completions', skillsProfilePrompt, headers)
     ]);
     // console.log(generalResponse.data.choices[0].message.content, "generalResponse.data.choices[0].message.content")
     // console.log(experienceResponse.data.choices[0].message.content, "experienceResponse.data.choices[0].message.content")
     const generalData = extractJSON(generalResponse.data.choices[0].message.content);
     const experienceData = extractJSON(experienceResponse.data.choices[0].message.content);
-    const skillsData = extractJSON(skillsResponse.data.choices[0].message.content);
+    const skillsProfileData = extractJSON(skillsProfileResponse.data.choices[0].message.content);
 
     const finalResult = {
       ...generalData,
       ...experienceData,
-      skills_profile: skillsData?.skills_profile || [],
+      skills_profile: skillsProfileData.skills_profile || [],
       appliedJobTitle: appliedJobTitle || ""
     };
 
