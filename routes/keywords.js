@@ -1,13 +1,18 @@
-import { Router } from 'express';
-import { keywordController } from '../controllers/keywordController.js';
-import { authMiddleware } from '../middleware/authMiddleware.js';
-import { body, param, query } from 'express-validator';
-import { validationMiddleware } from '../middleware/validationMiddleware.js';
+const { Router } = require('express');
+const { keywordController } = require('../controllers/keywordController');
+const { body, param, query } = require('express-validator');
+
+// Inline validation middleware (runs express-validator results)
+const validationMiddleware = (req, res, next) => {
+  const { validationResult } = require('express-validator');
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+  next();
+};
 
 const router = Router();
-
-// Apply authentication middleware to all routes
-router.use(authMiddleware);
 
 // Extract keywords from job description
 router.post('/extract',
@@ -214,4 +219,4 @@ router.post('/validate',
   keywordController.validateKeywords
 );
 
-export default router;
+module.exports = router;
