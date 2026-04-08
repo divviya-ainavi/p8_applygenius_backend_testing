@@ -12,8 +12,7 @@ const extractSkills = async (req, res) => {
     });
     res.json(response.data);
   } catch (error) {
-    console.error("extractSkills error:", error.message);
-    res.status(500).json({ error: "Failed to extract skills" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -25,22 +24,20 @@ const getSkillsProfile = async (req, res) => {
     });
     res.json(response.data);
   } catch (error) {
-    console.error("getSkillsProfile error:", error.message);
-    res.status(500).json({ error: "Failed to fetch skills profile" });
+    res.status(500).json({ error: error.message });
   }
 };
 
 const updateSkills = async (req, res) => {
   try {
     const { userId, skills } = req.body;
-    const response = await axios.post(`${N8N_BASE_URL}/skills-update`, {
+    const response = await axios.put(`${N8N_BASE_URL}/skills-update`, {
       userId,
       skills,
     });
     res.json(response.data);
   } catch (error) {
-    console.error("updateSkills error:", error.message);
-    res.status(500).json({ error: "Failed to update skills" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -53,8 +50,7 @@ const calculateFitScore = async (req, res) => {
     });
     res.json(response.data);
   } catch (error) {
-    console.error("calculateFitScore error:", error.message);
-    res.status(500).json({ error: "Failed to calculate fit score" });
+    res.status(500).json({ error: error.message });
   }
 };
 
