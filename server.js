@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const pdfRoutes = require("./routers/pdfRoutes");
 const resumeRoutes = require('./routers/resumeRoutes');
+const skillsRoutes = require('./routers/skillsRoutes');
 const dotenv = require('dotenv');
 
 // dotenv.config();
@@ -15,6 +16,7 @@ app.use(express.json());
 
 app.use("/pdf", pdfRoutes);
 app.use('/', resumeRoutes);
+app.use('/skills', skillsRoutes);
 
 app.listen(PORT, () => {
     console.log(`🚀 Server running on http://localhost:${PORT}`);
