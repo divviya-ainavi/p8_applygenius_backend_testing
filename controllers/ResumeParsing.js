@@ -129,19 +129,54 @@ ${resumeText}`
       }
     };
 
-    // 🔁 Run both requests in parallel
-    const [generalResponse, experienceResponse] = await Promise.all([
+    const skillsPrompt = {
+      model: 'gpt-4.1-mini',
+      temperature: 0,
+      messages: [
+        {
+          role: 'user',
+          content: `Extract a structured skills profile from the resume below. For each skill, infer:
+- skill name
+- proficiency level (Beginner | Intermediate | Advanced | Expert) based on context
+- company name where the skill was used (if identifiable)
+- job title / role where the skill was used (if identifiable)
+- approximate duration of usage (e.g. "2 years", "6 months")
+
+Return ONLY valid raw JSON (no markdown):
+{
+  "skills_profile": [
+    {
+      "skill": "Python",
+      "proficiency": "Advanced",
+      "company": "Acme Corp",
+      "role": "Data Engineer",
+      "duration": "3 years"
+    }
+  ]
+}
+
+Resume Text:
+${resumeText}`
+        }
+      ]
+    };
+
+    // 🔁 Run all three requests in parallel
+    const [generalResponse, experienceResponse, skillsResponse] = await Promise.all([
       axios.post('https://api.openai.com/v1/chat/completions', generalPrompt, headers),
-      axios.post('https://api.openai.com/v1/chat/completions', experiencePrompt, headers)
+      axios.post('https://api.openai.com/v1/chat/completions', experiencePrompt, headers),
+      axios.post('https://api.openai.com/v1/chat/completions', skillsPrompt, headers)
     ]);
     // console.log(generalResponse.data.choices[0].message.content, "generalResponse.data.choices[0].message.content")
     // console.log(experienceResponse.data.choices[0].message.content, "experienceResponse.data.choices[0].message.content")
     const generalData = extractJSON(generalResponse.data.choices[0].message.content);
     const experienceData = extractJSON(experienceResponse.data.choices[0].message.content);
+    const skillsData = extractJSON(skillsResponse.data.choices[0].message.content);
 
     const finalResult = {
       ...generalData,
       ...experienceData,
+      skills_profile: skillsData?.skills_profile || [],
       appliedJobTitle: appliedJobTitle || ""
     };
 
