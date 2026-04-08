@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const pdfRoutes = require("./routers/pdfRoutes");
 const resumeRoutes = require('./routers/resumeRoutes');
+const keywordsRouter = require('./routes/keywords');
 const dotenv = require('dotenv');
 
 // dotenv.config();
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/pdf", pdfRoutes);
+app.use('/keywords', keywordsRouter);
 app.use('/', resumeRoutes);
 
 app.listen(PORT, () => {
