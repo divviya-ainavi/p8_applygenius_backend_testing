@@ -6,6 +6,15 @@ import { validationMiddleware } from '../middleware/validationMiddleware.js';
 
 const router = Router();
 
+// Impact analysis: health check — must be registered before authMiddleware
+router.get('/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    routes: ['extract', 'preferences', 'extraction/:id', 'extractions', 'suggestions', 'bulk-extract', 'analytics', 'validate'],
+    timestamp: new Date().toISOString(),
+  });
+});
+
 // Apply authentication middleware to all routes
 router.use(authMiddleware);
 

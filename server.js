@@ -16,6 +16,11 @@ app.use(express.json());
 app.use("/pdf", pdfRoutes);
 app.use('/', resumeRoutes);
 
+// Impact analysis: health check endpoint
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', timestamp: new Date().toISOString(), service: 'applygenius-backend' });
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT} `);
 });
