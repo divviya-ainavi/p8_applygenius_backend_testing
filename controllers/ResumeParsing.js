@@ -1,4 +1,5 @@
 const axios = require('axios');
+const progressService = require('../services/progressService');
 
 function extractJSON(text) {
   const jsonStart = text.indexOf('{');
@@ -16,10 +17,29 @@ function extractJSON(text) {
 
 
 exports.parseResume = async (req, res) => {
-  const { resume: resumeText, appliedJobTitle } = req.body;
+  const { resume: resumeText, appliedJobTitle, jobId } = req.body;
   if (!resumeText) return res.status(400).json({ error: 'Resume text is required' });
+
+  // Initialise progress tracking if a jobId was provided
+  if (jobId) {
+    progressService.createJob(jobId);
+    progressService.updateStep(jobId, {
+      stepLabel: 'Parsing resume...',
+      percentComplete: 10,
+      estimatedSecondsRemaining: 45,
+    });
+  }
+
   // console.log(process.env.OPENAI_API_KEY, "open api key")
   try {
+    if (jobId) {
+      progressService.updateStep(jobId, {
+        stepLabel: 'Extracting keywords from job description...',
+        percentComplete: 25,
+        estimatedSecondsRemaining: 35,
+      });
+    }
+
     const generalPrompt = {
       model: 'gpt-4.1-mini',
       temperature: 0,
@@ -129,26 +149,59 @@ ${resumeText}`
       }
     };
 
+    if (jobId) {
+      progressService.updateStep(jobId, {
+        stepLabel: 'Scoring ATS compatibility...',
+        percentComplete: 45,
+        estimatedSecondsRemaining: 25,
+      });
+    }
+
     // 🔁 Run both requests in parallel
     const [generalResponse, experienceResponse] = await Promise.all([
       axios.post('https://api.openai.com/v1/chat/completions', generalPrompt, headers),
       axios.post('https://api.openai.com/v1/chat/completions', experiencePrompt, headers)
     ]);
+
+    if (jobId) {
+      progressService.updateStep(jobId, {
+        stepLabel: 'Generating tailored content...',
+        percentComplete: 70,
+        estimatedSecondsRemaining: 12,
+      });
+    }
+
     // console.log(generalResponse.data.choices[0].message.content, "generalResponse.data.choices[0].message.content")
     // console.log(experienceResponse.data.choices[0].message.content, "experienceResponse.data.choices[0].message.content")
     const generalData = extractJSON(generalResponse.data.choices[0].message.content);
     const experienceData = extractJSON(experienceResponse.data.choices[0].message.content);
 
+    if (jobId) {
+      progressService.updateStep(jobId, {
+        stepLabel: 'Optimising formatting...',
+        percentComplete: 90,
+        estimatedSecondsRemaining: 4,
+      });
+    }
+
     const finalResult = {
       ...generalData,
       ...experienceData,
-      appliedJobTitle: appliedJobTitle || ""
+      appliedJobTitle: appliedJobTitle || "",
+      jobId: jobId || null,
     };
+
+    if (jobId) {
+      progressService.completeJob(jobId);
+    }
 
     res.json(finalResult);
 
   } catch (error) {
     console.error('Error parsing resume:', error.message);
+    if (jobId) {
+      progressService.failJob(jobId, 'Failed to parse resume');
+    }
     res.status(500).json({ error: 'Failed to parse resume' });
   }
 };
